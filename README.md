@@ -73,17 +73,14 @@ styles/
 `styles/base/_tokens.scss` holds two tiers:
 
 - `--c-static-*` — raw values read from Figma. Never change.
-- `--c-*` — semantic roles. Flip between light and dark.
+- `--c-*` — semantic roles, mapped onto those raw values.
 
-Light is the Figma design as drawn (page `#f4ece2`, ink `#0a0909`, terracotta
-`#b5502c`, CTA `#ffac66`). Dark extends the palette already present inside the
-page — the hero, CTA band and philosophy card are dark by design.
+**Light only**, exactly as the Figma file is drawn: page `#f4ece2`, ink
+`#0a0909`, terracotta `#b5502c`, CTA `#ffac66`.
 
-Theme is driven by `useTheme`, which sets `data-theme` **and** `data-bs-theme`
-on `<html>` so Raahi tokens and React-Bootstrap never disagree. It honours
-`prefers-color-scheme` until the user makes an explicit choice.
-
-Sections that stay dark in both themes use the `.is-inverse` class.
+There is no dark theme and no theme switch. The dark passages in the page — the
+hero, the CTA band, the philosophy art card — are dark *by design* in Figma, not
+by theme; they opt in through the `.is-inverse` class.
 
 ### Responsive
 

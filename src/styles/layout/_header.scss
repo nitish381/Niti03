@@ -123,27 +123,6 @@
       display: none;
     }
   }
-
-  /// Theme switch sits quietly next to the CTA.
-  &__toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: #{rem(40)};
-    height: #{rem(40)};
-    font-size: #{rem(18)};
-    line-height: 1;
-    color: var(--c-static-white);
-    border-radius: 50%;
-    transition:
-      background-color $dur-fast ease,
-      transform $dur-fast ease;
-
-    &:hover {
-      background-color: rgb(255 255 255 / 12%);
-      transform: scale(1.06);
-    }
-  }
 }
 
 /// Brand lockup.

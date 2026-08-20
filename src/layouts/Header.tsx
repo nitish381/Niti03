@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { AssetImage } from '@/components/AssetImage';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { useScrolled } from '@/hooks/useScrolled';
 import { brand, nav } from '@/content/raahi';
 
@@ -89,7 +88,6 @@ export function Header() {
         </nav>
 
         <div className="site-header__actions">
-          <ThemeToggle />
           <div className="site-header__pill">
             <InstallPill />
           </div>

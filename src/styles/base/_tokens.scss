@@ -5,11 +5,11 @@
 ///
 /// Two tiers:
 ///   1. `--c-static-*`  raw brand values read from Figma. These never change.
-///   2. `--c-*`         semantic roles. These flip between light and dark.
+///   2. `--c-*`         semantic roles, mapped onto those raw values.
 ///
-/// The light theme is the Figma design as drawn. The dark theme extends the
-/// palette that already exists inside the page (the hero, the CTA band and the
-/// philosophy card are dark by design) across the whole surface.
+/// Light only, exactly as the Figma file is drawn. The dark passages in the
+/// page — the hero, the CTA band, the philosophy art card — are dark *by
+/// design*, not by theme; they opt in through `.is-inverse` below.
 /// ---------------------------------------------------------------------------
 
 :root {
@@ -41,7 +41,7 @@
   --c-static-border-card: #d2c1ac;
   --c-static-border-badge: #a6a6a6;
 
-  /* -- Semantic roles: LIGHT (the Figma design as drawn) ------------------ */
+  /* -- Semantic roles (the Figma design as drawn) ------------------------- */
   --c-bg-page: var(--c-static-sand);
   --c-bg-elevated: var(--c-static-warm-white);
   --c-bg-inverse: var(--c-static-charcoal-card);
@@ -121,54 +121,8 @@
   }
 }
 
-/// Dark theme. Applied by `data-theme="dark"` on <html>; `data-bs-theme` is
-/// set alongside it so React-Bootstrap components follow the same switch.
-:root[data-theme='dark'] {
-  --c-bg-page: #17150f;
-  --c-bg-elevated: var(--c-static-cta-band);
-  --c-bg-inverse: #2b2a26;
-  --c-bg-band: #100f0c;
-  --c-bg-field: #2b2a26;
-
-  --c-text-heading: var(--c-static-sand);
-  --c-text-body: #e6ddd2;
-  --c-text-muted: #a89f95;
-  --c-text-question: var(--c-static-sand);
-  --c-text-placeholder: #8b857c;
-
-  --c-accent: #d9714a;
-
-  --c-border-card: #3a352d;
-  --c-rule: rgb(255 255 255 / 12%);
-
-  color-scheme: dark;
-}
-
-/// Honour the OS preference when the user has not made an explicit choice.
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --c-bg-page: #17150f;
-    --c-bg-elevated: var(--c-static-cta-band);
-    --c-bg-inverse: #2b2a26;
-    --c-bg-band: #100f0c;
-    --c-bg-field: #2b2a26;
-
-    --c-text-heading: var(--c-static-sand);
-    --c-text-body: #e6ddd2;
-    --c-text-muted: #a89f95;
-    --c-text-question: var(--c-static-sand);
-    --c-text-placeholder: #8b857c;
-
-    --c-accent: #d9714a;
-
-    --c-border-card: #3a352d;
-    --c-rule: rgb(255 255 255 / 12%);
-
-    color-scheme: dark;
-  }
-}
-
-/// Sections that are dark in both themes.
+/// Passages the Figma file draws dark — the hero, the CTA band and the
+/// philosophy art card. These are part of the design, not a theme.
 .is-inverse {
   @include inverse-surface;
 }
