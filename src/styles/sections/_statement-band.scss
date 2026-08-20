@@ -1,11 +1,32 @@
 @use '../abstracts' as *;
 
-/// statement-band — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Figma: y 1180, centered, 30px gap, body capped at 1123.336px.
 .statement-band {
-  position: relative;
+  padding-block: fluid(56, 100) fluid(40, 60);
 
   &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: fluid(16, 30);
+    align-items: center;
+    text-align: center;
+
     @include container;
+  }
+
+  &__title {
+    max-width: #{rem(1123.336)};
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(27, 50);
+    line-height: 1.2;
+    color: var(--c-text-heading);
+  }
+
+  &__body {
+    max-width: #{rem(1123.336)};
+    font-size: fluid(15, 16);
+    line-height: 1.625;
+    color: var(--c-text-body);
   }
 }

@@ -11,15 +11,12 @@
     <!--
       Favicon is derived from the Raahi logo mark (Figma 105:1132), which is
       still pending export — see docs/asset-manifest.md. No stand-in is linked
-      here on purpose.
+      here on purpose; the empty icon href just stops the default /favicon.ico
+      request rather than standing in for the real mark.
     -->
+    <link rel="icon" href="data:," />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;600&display=swap"
-    />
+    <!-- Cormorant / Poppins / Inter are self-hosted; see styles/base/_fonts.scss. -->
 
     <title>Raahi — One story. Many lives.</title>
   </head>

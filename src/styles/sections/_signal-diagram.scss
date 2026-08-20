@@ -1,11 +1,199 @@
 @use '../abstracts' as *;
 
-/// signal-diagram — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Radial composition. Figma places everything absolutely on a 1920 canvas;
+/// here a 5-column / 5-row grid reproduces the same geometry while staying
+/// fluid. Column and row sizes follow the Figma measurements:
+/// label 239 · connector 301 · photo 448 · connector 301 · label 239.
 .signal-diagram {
-  position: relative;
+  padding-block: fluid(40, 60) fluid(56, 100);
+  overflow: clip;
 
   &__inner {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(#{rem(60)}, #{rem(301)})
+      minmax(#{rem(240)}, #{rem(448)})
+      minmax(#{rem(60)}, #{rem(301)})
+      minmax(0, 1fr);
+    grid-template-rows: auto #{rem(81)} auto #{rem(81)} auto;
+    align-items: center;
+    justify-items: center;
+    row-gap: fluid(8, 16);
+
     @include container;
+
+    @include down('md') {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+  }
+
+  /// -- Centre figure: 447.9 × 449.58, radius 93, 16px white 60% border --
+  &__figure {
+    position: relative;
+    grid-column: 3;
+    grid-row: 3;
+    width: 100%;
+    max-width: #{rem(448)};
+    aspect-ratio: 447.904 / 449.58;
+    border: fluid(8, 16) solid rgb(255 255 255 / 60%);
+    border-radius: fluid(48, 93);
+    overflow: hidden;
+
+    @include down('md') {
+      max-width: #{rem(320)};
+    }
+  }
+
+  &__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__centre {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: fluid(14, 18);
+    line-height: 1;
+    color: var(--c-static-white);
+    mix-blend-mode: overlay;
+    transform: translate(-50%, -50%) rotate(12.11deg);
+    pointer-events: none;
+  }
+
+  /// -- Labels --
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(11.667)};
+
+    &--top {
+      grid-column: 3;
+      grid-row: 1;
+      align-items: center;
+      text-align: center;
+    }
+
+    &--bottom {
+      grid-column: 3;
+      grid-row: 5;
+      align-items: center;
+      text-align: center;
+    }
+
+    &--left {
+      grid-column: 1;
+      grid-row: 3;
+      align-items: flex-start;
+      justify-self: start;
+      text-align: left;
+    }
+
+    &--right {
+      grid-column: 5;
+      grid-row: 3;
+      align-items: flex-start;
+      justify-self: end;
+      text-align: left;
+    }
+
+    @include down('md') {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  &__label-key {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: fluid(13, 16);
+    line-height: 1.56;
+    color: var(--c-text-body);
+    white-space: nowrap;
+  }
+
+  &__label-value {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(22, 30);
+    line-height: 1;
+    color: var(--c-accent);
+    white-space: nowrap;
+  }
+
+  /// -- Connectors: draw outward from the centre on entry --
+  &__connector {
+    display: block;
+    transition: transform 400ms $ease-out-expo;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    &--left,
+    &--right {
+      grid-row: 3;
+      width: 100%;
+      height: #{rem(24.036)};
+      transform: scaleX(0);
+    }
+
+    &--left {
+      grid-column: 2;
+      transform-origin: right center;
+    }
+
+    &--right {
+      grid-column: 4;
+      transform-origin: left center;
+    }
+
+    &--top,
+    &--bottom {
+      grid-column: 3;
+      width: #{rem(24.057)};
+      height: 100%;
+      transform: scaleY(0);
+    }
+
+    &--top {
+      grid-row: 2;
+      transform-origin: center bottom;
+      transition-delay: 100ms;
+    }
+
+    &--bottom {
+      grid-row: 4;
+      transform-origin: center top;
+      transition-delay: 300ms;
+    }
+
+    .is-drawn &--left,
+    .is-drawn &--right {
+      transform: scaleX(1);
+    }
+
+    .is-drawn &--top,
+    .is-drawn &--bottom {
+      transform: scaleY(1);
+    }
+
+    /// The axes carry no meaning once the layout stacks.
+    @include down('md') {
+      display: none;
+    }
+
+    @include reduced-motion {
+      transition-duration: 1ms;
+      transition-delay: 0ms;
+    }
   }
 }

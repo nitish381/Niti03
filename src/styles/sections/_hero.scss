@@ -1,11 +1,396 @@
 @use '../abstracts' as *;
 
-/// hero — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Hero — 1920 × 1080 in Figma. Every decorative layer is positioned as a
+/// percentage of the stage, derived from its Figma px offset, so the whole
+/// composition scales together instead of drifting apart.
 .hero {
   position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background-color: var(--c-static-black);
 
+  @include inverse-surface;
+
+  /// Desktop: one viewport, matching the Figma frame proportion.
+  @include up('md') {
+    display: flex;
+    align-items: center;
+    min-height: #{rem(680)};
+    height: 100svh;
+    max-height: #{rem(1080)};
+  }
+
+  &__stage {
+    position: absolute;
+    inset: 0;
+    z-index: $z-decor;
+    overflow: clip;
+    pointer-events: none;
+
+    /// Mobile: the visual becomes a fixed-height crop above the copy.
+    @include down('md') {
+      position: relative;
+      height: 62svh;
+      min-height: #{rem(360)};
+    }
+  }
+
+  /// -- Photo: Figma left 37.5, bottom -122.96, 1919.5 × 1202.96, opacity 30% --
+  &__photo {
+    position: absolute;
+    inset-inline-start: 1.95%;
+    inset-block-end: -11.39%;
+    width: 99.97%;
+    height: 111.38%;
+    opacity: 0;
+    transition: opacity 1200ms ease;
+
+    .hero--entered & {
+      opacity: 0.3;
+    }
+
+    @include down('md') {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+
+      .hero--entered & {
+        opacity: 0.45;
+      }
+    }
+  }
+
+  &__photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    @include down('md') {
+      object-position: 35% 45%;
+    }
+  }
+
+  /// Left-edge black scrim, to 9.926% (Figma gradient stop).
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      var(--c-static-black) 0%,
+      rgb(0 0 0 / 0%) 9.926%
+    );
+  }
+
+  /// -- Golden path: inset 22.13% / 19.74% / 25.07% / 54.23% --
+  &__path {
+    position: absolute;
+    inset-inline-start: 54.23%;
+    inset-block-start: 22.13%;
+    width: 26.03%;
+    height: 52.8%;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 1400ms $ease-out-expo 700ms,
+      transform 1400ms $ease-out-expo 700ms;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero--entered & {
+      opacity: 1;
+      transform: none;
+    }
+
+    /// Below tablet the wide desktop curve does not read; it is replaced by a
+    /// short vertical link between the two waypoints.
+    @include down('lg') {
+      inset-inline-start: 46%;
+      width: 34%;
+    }
+
+    @include down('md') {
+      display: none;
+    }
+  }
+
+  /// -- Fog layers --
+  &__fog {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 900ms ease 400ms;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero--entered & {
+      opacity: 1;
+    }
+
+    &--right {
+      inset-inline-start: 33.27%;
+      inset-block-start: 77.7%;
+      width: 66.73%;
+      height: 26.74%;
+      animation: hero-drift-right 20s ease-in-out infinite;
+    }
+
+    &--left {
+      inset-inline-start: -0.1%;
+      inset-block-start: 83.87%;
+      width: 54.6%;
+      height: 20.57%;
+      animation: hero-drift-left 20s ease-in-out infinite;
+    }
+
+    @include reduced-motion {
+      animation: none;
+    }
+  }
+
+  /// -- Horizon glow --
+  &__glow {
+    position: absolute;
+    inset-inline-start: 60.22%;
+    inset-block-start: 1.14%;
+    width: 40.5%;
+    height: 67.3%;
+    opacity: 0;
+    transition: opacity 600ms ease 200ms;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero--entered & {
+      opacity: 1;
+    }
+  }
+
+  /// -- Waypoint markers --
+  &__waypoint {
+    position: absolute;
+    display: flex;
+    gap: #{rem(16)};
+    align-items: center;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: hero-waypoint-in 700ms $ease-out-expo forwards;
+    animation-play-state: paused;
+
+    .hero--entered & {
+      animation-play-state: running;
+    }
+
+    &--here {
+      inset-inline-start: 51.77%;
+      inset-block-start: 72.33%;
+    }
+
+    &--target {
+      inset-inline-start: 76.84%;
+      inset-block-start: 14.88%;
+    }
+
+    /// Pull both markers inward so neither leaves the canvas.
+    @include down('xl') {
+      &--target {
+        inset-inline-start: 68%;
+      }
+    }
+
+    @include down('lg') {
+      &--here {
+        inset-inline-start: 44%;
+        inset-block-start: 70%;
+      }
+
+      &--target {
+        inset-inline-start: 58%;
+        inset-block-start: 12%;
+      }
+    }
+
+    /// Mobile: two stacked labels pinned to the crop, compass at 64px.
+    @include down('md') {
+      inset-inline-start: var(--container-gutter) !important;
+      gap: #{rem(12)};
+
+      &--here {
+        inset-block-start: auto;
+        inset-block-end: #{rem(20)};
+      }
+
+      &--target {
+        inset-block-start: #{rem(20)};
+      }
+    }
+
+    @include reduced-motion {
+      animation-duration: 1ms;
+    }
+  }
+
+  &__waypoint-icon {
+    display: block;
+    flex-shrink: 0;
+    width: fluid(64, 116);
+
+    img,
+    .asset-slot {
+      width: 100%;
+      aspect-ratio: 116 / 117;
+    }
+  }
+
+  &__waypoint-text {
+    display: flex;
+    flex-direction: column;
+    gap: fluid(6, 20);
+    max-width: #{rem(229)};
+  }
+
+  &__waypoint-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: fluid(18, 30);
+    line-height: 1;
+    letter-spacing: 1.8px;
+    color: var(--c-static-cloud);
+  }
+
+  &__waypoint-meta {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: fluid(12, 16);
+    line-height: 1.2;
+    letter-spacing: 1px;
+    color: var(--c-static-white);
+  }
+
+  /// -- Copy block: Figma left 160, top 295.97, width 810 --
   &__inner {
+    position: relative;
+    z-index: $z-content;
+    width: 100%;
+
     @include container;
+
+    @include down('md') {
+      padding-block: var(--space-2xl) var(--space-3xl);
+    }
+  }
+
+  &__copy {
+    display: flex;
+    flex-direction: column;
+    gap: fluid(32, 60);
+    align-items: flex-start;
+    max-width: #{rem(810)};
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(40, 120);
+    line-height: 1.05;
+    color: var(--c-static-white);
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 900ms $ease-out-expo 400ms,
+      transform 900ms $ease-out-expo 400ms;
+
+    .hero--entered & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(20)};
+    max-width: #{rem(576.374)};
+    font-size: fluid(16, 18);
+    line-height: 1.5;
+    color: var(--c-static-stone);
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 900ms $ease-out-expo 600ms,
+      transform 900ms $ease-out-expo 600ms;
+
+    .hero--entered & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  &__cta {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 900ms $ease-out-expo 800ms,
+      transform 900ms $ease-out-expo 800ms,
+      filter $dur-base ease,
+      box-shadow $dur-base ease;
+
+    .hero--entered & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /// Reduced motion: everything arrives immediately, nothing travels.
+  @include reduced-motion {
+    .hero__photo,
+    .hero__path,
+    .hero__fog,
+    .hero__glow,
+    .hero__title,
+    .hero__body,
+    .hero__cta {
+      transition-duration: 1ms;
+      transition-delay: 0ms;
+      transform: none;
+    }
+  }
+}
+
+@keyframes hero-waypoint-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-drift-right {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 12px 0;
+  }
+}
+
+@keyframes hero-drift-left {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: -12px 0;
   }
 }

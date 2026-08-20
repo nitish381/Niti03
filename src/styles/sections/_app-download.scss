@@ -1,11 +1,145 @@
 @use '../abstracts' as *;
 
-/// app-download — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Figma 105:1352 — a 1599 × 415 #201F1A band inside a 496-tall frame, with
+/// two phone mockups overflowing it top and bottom.
 .app-download {
-  position: relative;
+  padding-block: fluid(48, 80);
 
   &__inner {
     @include container;
+  }
+
+  &__band {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: fluid(320, 415);
+    padding: fluid(32, 60);
+    overflow: hidden;
+    background-color: var(--c-bg-band);
+    border-radius: fluid(24, 40);
+
+    @include inverse-surface;
+
+    /// Copy starts at 699/1599 of the band, as in Figma.
+    @include up('md') {
+      padding-inline-start: 43.7%;
+    }
+
+    @include down('md') {
+      flex-direction: column;
+      gap: fluid(24, 40);
+      text-align: center;
+    }
+  }
+
+  &__texture {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /// -- Phones -------------------------------------------------------------
+  /// In Figma both mockups are 530px tall inside a 415px band that clips them,
+  /// so they bleed off the bottom rather than breaking out of it. Sizes and
+  /// offsets below are percentages of the band, straight from nodes
+  /// 164:235 / 164:236.
+  &__phones {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    @include down('md') {
+      position: static;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  &__phone {
+    position: absolute;
+    width: 16.2%;
+    height: 127.7%;
+    object-fit: cover;
+    border-radius: fluid(24, 42.486);
+
+    &--back {
+      inset-inline-start: 8%;
+      inset-block-start: 9.87%;
+    }
+
+    &--front {
+      inset-inline-start: 20.1%;
+      inset-block-start: -0.08%;
+    }
+
+    /// Below 768 a single phone sits above the copy in normal flow; an
+    /// overlapping, clipped pair is illegible at that width.
+    @include down('md') {
+      position: static;
+      width: min(#{rem(220)}, 62%);
+      height: auto;
+      aspect-ratio: 258.947 / 529.978;
+
+      &--back {
+        display: none;
+      }
+    }
+  }
+
+  /// -- Copy ---------------------------------------------------------------
+  &__copy {
+    position: relative;
+    z-index: $z-content;
+    display: flex;
+    flex-direction: column;
+    gap: fluid(20, 40);
+    align-items: flex-start;
+    max-width: #{rem(843)};
+
+    @include down('md') {
+      align-items: center;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--c-static-sand);
+  }
+
+  &__title-lead {
+    font-size: fluid(22, 40);
+    line-height: 1.2;
+  }
+
+  &__title-main {
+    font-size: fluid(30, 70);
+    line-height: 1.19;
+  }
+
+  &__body {
+    font-size: fluid(15, 16);
+    line-height: 1.5;
+    letter-spacing: -0.64px;
+    color: rgb(255 255 255 / 70%);
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: #{rem(10)};
   }
 }

@@ -31,6 +31,11 @@ export interface FeatureCard {
 export interface IcebergMarker {
   label: string;
   depth: 'above' | 'below';
+  /** Position as a percentage of the 644.653 × 773.584 iceberg box (Figma). */
+  x: number;
+  y: number;
+  /** Which side the ring sits on, facing the iceberg. */
+  side: 'left' | 'right';
 }
 
 export interface FaqEntry {
@@ -66,7 +71,9 @@ export const hero = {
 } as const;
 
 export const statementBand = {
-  title: 'No Two People Walk Through Life With The Same Map.',
+  // Casing matches Figma exactly: per-character spans render "with the"
+  // lowercase and "MAP." in full caps (node 117:814).
+  title: 'No Two People Walk Through Life with the Same MAP.',
   body: 'Raahi begins by understanding what you’re facing, how you respond, where you are, and where you want to go.',
 } as const;
 
@@ -165,17 +172,19 @@ export const iceberg = {
   cta: 'Reserve My Seat',
   aboveHeading: 'What you see',
   belowHeading: 'What shapes you',
+  // x/y derived from the absolute Figma offsets of nodes 146:2598–146:2607,
+  // expressed relative to the iceberg graphic's own box.
   markers: [
-    { label: 'Your Actions', depth: 'above' },
-    { label: 'Your Choices', depth: 'above' },
-    { label: 'Your Results', depth: 'above' },
-    { label: 'Your Habits', depth: 'above' },
-    { label: 'Beliefs', depth: 'below' },
-    { label: 'Fears', depth: 'below' },
-    { label: 'Expectations', depth: 'below' },
-    { label: 'Inherited Patterns', depth: 'below' },
-    { label: 'Past Experiences', depth: 'below' },
-    { label: 'Mental Models', depth: 'below' },
+    { label: 'Your Actions', depth: 'above', x: 17.8, y: 6.2, side: 'right' },
+    { label: 'Your Choices', depth: 'above', x: 58.1, y: 8.6, side: 'left' },
+    { label: 'Your Results', depth: 'above', x: 8.3, y: 16.8, side: 'right' },
+    { label: 'Your Habits', depth: 'above', x: 72.2, y: 17.5, side: 'left' },
+    { label: 'Beliefs', depth: 'below', x: 80.6, y: 40.6, side: 'left' },
+    { label: 'Expectations', depth: 'below', x: 3.8, y: 49.7, side: 'right' },
+    { label: 'Fears', depth: 'below', x: 74.9, y: 57.0, side: 'left' },
+    { label: 'Inherited Patterns', depth: 'below', x: 7.2, y: 66.6, side: 'right' },
+    { label: 'Past Experiences', depth: 'below', x: 65.2, y: 74.9, side: 'left' },
+    { label: 'Mental Models', depth: 'below', x: 23.3, y: 84.4, side: 'right' },
   ] satisfies IcebergMarker[],
 } as const;
 

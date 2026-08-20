@@ -1,11 +1,76 @@
 @use '../abstracts' as *;
 
-/// founder-message — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Figma 137:2372 — avatar 139.70px + 182px name column beside a 1406px quote.
 .founder-message {
-  position: relative;
+  padding-block: 0 fluid(64, 120);
+  background-color: var(--c-bg-elevated);
 
   &__inner {
+    display: grid;
+    gap: fluid(24, 40);
+
     @include container;
+
+    @include up('md') {
+      grid-template-columns: #{rem(182)} minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  &__person {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(6)};
+    align-items: flex-start;
+  }
+
+  &__avatar {
+    width: fluid(88, 139.7);
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  &__name {
+    margin-block-start: #{rem(10)};
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: fluid(15, 16);
+    line-height: 1.375;
+    color: var(--c-text-heading);
+  }
+
+  &__role {
+    font-family: var(--font-body);
+    font-size: fluid(13, 14);
+    line-height: 1.5;
+    color: var(--c-text-muted);
+  }
+
+  &__quote {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(16)};
+    max-width: #{rem(1406)};
+    font-size: fluid(15, 16);
+    line-height: 1.625;
+    color: var(--c-text-body);
+  }
+
+  &__mark {
+    display: block;
+    width: fluid(36, 70.85);
+    aspect-ratio: 70.85 / 62;
+    margin-block-end: #{rem(4)};
+    opacity: 0.5;
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(27, 50);
+    line-height: 1.1;
+    color: var(--c-text-heading);
   }
 }

@@ -1,11 +1,241 @@
 @use '../abstracts' as *;
 
-/// book-carousel — structural scaffold. Full visual implementation lands in Phase 03,
-/// once the original Figma assets are available.
+/// Figma 111:2095 — 1920 × 965 band, mountain silhouette bleeding beyond the
+/// frame, a bottom gradient fade into the page sand, and a 1600-wide rail.
 .book-carousel {
   position: relative;
+  isolation: isolate;
+  padding-block: fluid(72, 120) 0;
+  overflow: clip;
+
+  &__decor {
+    position: absolute;
+    inset: 0;
+    z-index: $z-base;
+    pointer-events: none;
+  }
+
+  &__mountains {
+    position: absolute;
+    inset-block-start: -5%;
+    inset-inline-start: -47%;
+    width: 180%;
+    height: 148%;
+    rotate: 2deg;
+
+    img,
+    .asset-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    @include up('lg') {
+      inset-inline-start: -32%;
+      width: 150%;
+    }
+  }
+
+  /// Bottom fade into #f4ece2 — Figma 111:2109, h 341.47.
+  &__fade {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    height: #{rem(341.47)};
+    background-image: linear-gradient(
+      180deg,
+      rgb(244 236 226 / 0%) 0%,
+      var(--c-bg-page) 100%
+    );
+  }
 
   &__inner {
+    position: relative;
+    z-index: $z-content;
+
     @include container;
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-block-end: fluid(32, 56);
+
+    @include up('lg') {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(20)};
+    max-width: #{rem(626)};
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(27, 50);
+    line-height: 1.1;
+    color: var(--c-text-heading);
+  }
+
+  &__lede {
+    font-size: fluid(15, 16);
+    line-height: 1.625;
+    color: var(--c-text-body);
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: #{rem(20)};
+    flex-shrink: 0;
+  }
+
+  /// -- Rail --------------------------------------------------------------
+  &__rail {
+    position: relative;
+  }
+
+  &__track {
+    display: flex;
+    gap: fluid(24, 133.336);
+    padding-block-end: fluid(24, 40);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &.is-dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+      scroll-behavior: auto;
+    }
+  }
+
+  &__slide {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(17.778)};
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+
+    /// 3 visible at XL → 2 at lg → 1.2 at md → 1.1 below.
+    width: 82vw;
+    max-width: #{rem(444.444)};
+
+    @include up('md') {
+      width: 44vw;
+    }
+
+    @include up('lg') {
+      width: calc((100% - #{rem(60)}) / 2);
+    }
+
+    @include up('xxl') {
+      width: #{rem(444.444)};
+    }
+  }
+
+  &__index {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: fluid(32, 42.67);
+    line-height: 1;
+    color: var(--c-static-cream-alt);
+  }
+
+  &__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: $radius-sm;
+  }
+
+  &__cover {
+    width: 100%;
+    aspect-ratio: 444.444 / 642.579;
+    object-fit: contain;
+    transition: transform 350ms $ease-out-expo;
+
+    .book-carousel__card:hover &,
+    .book-carousel__card:focus-visible & {
+      transform: scale(1.03);
+    }
+  }
+
+  /// "Explore" pill — rises from bottom:-100px, exactly as in the component.
+  &__explore {
+    position: absolute;
+    inset-block-end: #{rem(-100)};
+    inset-inline-start: 50%;
+    padding: #{rem(19.556)} #{rem(35.556)};
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: fluid(15, 17.78);
+    line-height: 1;
+    color: var(--c-static-charcoal-card);
+    white-space: nowrap;
+    background-color: var(--c-static-cream-alt);
+    border-radius: $radius-lg;
+    transform: translateX(-50%);
+    transition: bottom 350ms $ease-out-expo;
+
+    .book-carousel__card:hover &,
+    .book-carousel__card:focus-visible & {
+      inset-block-end: #{rem(40)};
+    }
+
+    /// No hover on touch — show it under the cover instead.
+    @media (hover: none) {
+      position: static;
+      display: inline-block;
+      margin-block-start: #{rem(12)};
+      transform: none;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    gap: #{rem(12)};
+    justify-content: flex-end;
+    padding-block-end: fluid(40, 80);
+  }
+
+  &__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: #{rem(48)};
+    height: #{rem(48)};
+    font-size: #{rem(24)};
+    line-height: 1;
+    color: var(--c-text-heading);
+    border: 1px solid var(--c-border-card);
+    border-radius: 50%;
+    transition:
+      background-color $dur-fast ease,
+      border-color $dur-fast ease,
+      opacity $dur-fast ease;
+
+    &:hover:not(:disabled) {
+      background-color: var(--c-accent);
+      border-color: var(--c-accent);
+      color: var(--c-static-white);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 }

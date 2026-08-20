@@ -139,3 +139,30 @@ this is host-specific policy, not general network failure.
 which Figma redirects some exports to) for this environment's egress policy.
 Once allowed, every asset above can be pulled by node ID in a single pass —
 the manifest is written to be machine-readable for exactly that.
+
+---
+
+## How the exports get picked up (added in Phase 03)
+
+`src/assets/registry.ts` globs `src/assets/**/*.{png,jpg,jpeg,webp,avif,svg}` at
+build time and indexes every file by its **filename stem**. `AssetImage` looks
+up the manifest id above and renders the real `<img>` the moment a matching file
+exists.
+
+So the only step needed once Figma access is restored is:
+
+1. Export each node listed above.
+2. Save it under the **Target file** path in this document.
+3. Rebuild.
+
+No component, style or import needs to change. Until then each slot renders as
+an empty box with the correct aspect ratio, marked `data-asset-id` for tracing.
+47 slots are currently empty.
+
+### Correction to the Phase 01 audit
+
+The App Download CTA was described as having phone mockups that "break out of
+the band on both the top and bottom edges". Re-reading the source, both
+`105:1352` and `165:238` are `overflow-clip`, and the phones (530px tall) sit
+inside the 415px band — so they are **clipped by it and bleed off the bottom**
+rather than breaking out. The implementation follows the file, not the note.

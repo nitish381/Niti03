@@ -1,41 +1,46 @@
-import type { FormEvent } from 'react';
-import { Section } from '@/components/Section';
-import { SectionHeading } from '@/components/SectionHeading';
+import { useState, type FormEvent } from 'react';
+import { Reveal } from '@/components/Reveal';
 import { newsletter } from '@/content/raahi';
 
 export function Newsletter() {
+  const [done, setDone] = useState(false);
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Wiring lands with the real endpoint in a later phase.
+    // No endpoint is specified in the design; the success state is local only.
+    setDone(true);
   };
 
   return (
-    <Section name="newsletter">
-      <div className="section__decor" data-asset-group="newsletter-glow" />
+    <section className="newsletter">
+      <div className="newsletter__glow" aria-hidden="true" />
 
-      <SectionHeading
-        eyebrow={newsletter.eyebrow}
-        title={newsletter.title}
-        size="xl"
-        align="center"
-      />
+      <div className="newsletter__inner">
+        <Reveal className="newsletter__head">
+          <p className="newsletter__eyebrow">{newsletter.eyebrow}</p>
+          <h2 className="newsletter__title">{newsletter.title}</h2>
+        </Reveal>
 
-      <form className="newsletter__form" onSubmit={onSubmit}>
-        <label className="u-visually-hidden" htmlFor="newsletter-email">
-          {newsletter.placeholder}
-        </label>
-        <input
-          id="newsletter-email"
-          className="newsletter__input"
-          type="email"
-          name="email"
-          placeholder={newsletter.placeholder}
-          required
-        />
-        <button type="submit" className="newsletter__submit">
-          {newsletter.cta}
-        </button>
-      </form>
-    </Section>
+        <Reveal className="newsletter__form" delay={100}>
+          <form onSubmit={onSubmit} className="newsletter__field">
+            <label className="u-visually-hidden" htmlFor="newsletter-email">
+              {newsletter.placeholder}
+            </label>
+            <input
+              id="newsletter-email"
+              className="newsletter__input"
+              type="email"
+              name="email"
+              placeholder={newsletter.placeholder}
+              required
+              autoComplete="email"
+            />
+            <button type="submit" className="newsletter__submit">
+              {done ? '✓' : newsletter.cta}
+            </button>
+          </form>
+        </Reveal>
+      </div>
+    </section>
   );
 }

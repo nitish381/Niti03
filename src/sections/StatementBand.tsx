@@ -1,11 +1,18 @@
-import { Section } from '@/components/Section';
+import { Reveal } from '@/components/Reveal';
 import { statementBand } from '@/content/raahi';
 
+/** Thesis line bridging the hero into the personalization diagram. */
 export function StatementBand() {
   return (
-    <Section name="statement-band" variant="tight">
-      <h2>{statementBand.title}</h2>
-      <p>{statementBand.body}</p>
-    </Section>
+    <section className="statement-band">
+      <div className="statement-band__inner">
+        <Reveal as="h2" className="statement-band__title">
+          {statementBand.title}
+        </Reveal>
+        <Reveal as="p" className="statement-band__body" delay={100}>
+          {statementBand.body}
+        </Reveal>
+      </div>
+    </section>
   );
 }

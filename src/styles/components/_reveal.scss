@@ -1,0 +1,59 @@
+@use '../abstracts' as *;
+
+/// Default scroll entrance. Content is never hidden from assistive tech —
+/// only visually transitioned.
+.reveal {
+  opacity: 0;
+  transition:
+    opacity $dur-slow $ease-out-expo,
+    transform $dur-slow $ease-out-expo;
+  will-change: opacity, transform;
+
+  &--up {
+    transform: translate3d(0, #{rem(24)}, 0);
+  }
+
+  &--left {
+    transform: translate3d(#{rem(-32)}, 0, 0);
+  }
+
+  &--right {
+    transform: translate3d(#{rem(32)}, 0, 0);
+  }
+
+  &--scale {
+    transform: scale(0.96);
+  }
+
+  &--fade {
+    transform: none;
+  }
+
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /// Reduced motion still reveals — it just arrives without travel.
+  @include reduced-motion {
+    transform: none;
+    transition: opacity 1ms linear;
+  }
+}
+
+/// Empty slot standing in for an un-exported Figma asset. Deliberately neutral:
+/// it reserves the exact box without drawing anything that could be mistaken
+/// for the real artwork.
+.asset-slot {
+  display: block;
+  width: 100%;
+  background-color: color-mix(in srgb, currentcolor 5%, transparent);
+  border-radius: inherit;
+
+  /// Development only — makes an un-exported asset impossible to miss.
+  &--debug {
+    outline: 1px dashed color-mix(in srgb, currentcolor 18%, transparent);
+    outline-offset: -1px;
+  }
+}

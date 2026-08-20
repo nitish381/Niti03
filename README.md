@@ -96,13 +96,44 @@ Figma 1600 / 160 grid.
 
 ---
 
+### Motion
+
+- `lib/scrollEngine.ts` — one passive scroll listener and one rAF loop drive
+  every parallax element. Offsets are cached on register and resize, never read
+  per frame, and only near-viewport elements are written to.
+- `useReveal` — IntersectionObserver, no scroll listener.
+- Everything is gated on `prefers-reduced-motion`: reveals still reveal, they
+  just arrive without travel, and parallax never registers at all.
+
+Parallax is used in four places only (hero photo, hero fog ×2, library
+mountains, journey panorama). Text, cards and the iceberg are never parallaxed.
+
+---
+
 ## Asset status
 
 Assets are **not yet exported** — `www.figma.com` is blocked by this
-environment's egress policy. Nothing has been substituted; asset slots carry a
-`data-asset` attribute and stay empty.
+environment's egress policy. Nothing has been substituted.
 
-Full inventory, target filenames and the exact blocker: **`docs/asset-manifest.md`**.
+`AssetImage` looks each asset up in `src/assets/registry.ts`, which globs
+`src/assets/**` at build time and indexes by filename stem. When an asset is
+missing it renders an empty slot that reserves the exact same box, so the
+composition stays pixel-correct. **Drop the real exports into the folders named
+in the manifest and they appear automatically — no code changes.**
+
+There are currently **47 empty slots**. Full inventory, target filenames and the
+exact blocker: **`docs/asset-manifest.md`**.
+
+## Verification
+
+Driven in headless Chromium at 1920 / 1440 / 1280 / 1024 / 768 / 480 / 390 / 375:
+
+- No horizontal overflow at any width (`scrollWidth === clientWidth` throughout)
+- Zero console errors at any width
+- One `<h1>`, 14 `<h2>`, every `<img>` carries `alt`
+- 17 interaction checks pass — FAQ single-open + toggle, carousel arrows, theme
+  toggle with `data-bs-theme` sync, anchor scrolling, mobile drawer open/close,
+  and the three reduced-motion guarantees
 
 ## Documentation
 
