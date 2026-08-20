@@ -1,0 +1,13 @@
+@use '../abstracts' as *;
+
+.container-raahi {
+  @include container;
+
+  &--flush {
+    padding-inline: 0;
+  }
+
+  &--wide {
+    max-width: none;
+  }
+}

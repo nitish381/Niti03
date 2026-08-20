@@ -1,0 +1,52 @@
+@use '../abstracts' as *;
+
+/// The dark bordered badge used in the download CTA.
+.app-badge {
+  display: inline-flex;
+  gap: #{rem(8)};
+  align-items: center;
+  min-width: #{rem(143)};
+  height: #{rem(40)};
+  padding-inline: #{rem(7)};
+  color: var(--c-static-white);
+  background-color: var(--c-static-black);
+  border: 1px solid var(--c-border-badge);
+  border-radius: $radius-xs;
+  transition: transform $dur-base $ease-out-expo;
+
+  &:hover {
+    transform: scale(1.04);
+  }
+
+  &__icon {
+    width: #{rem(20)};
+    height: #{rem(24)};
+    object-fit: contain;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-utility);
+  }
+
+  &__kicker {
+    font-size: #{rem(9)};
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  &__store {
+    font-size: #{rem(18)};
+    line-height: 1;
+    letter-spacing: -0.47px;
+  }
+
+  /// The larger, full-artwork badge used in the library section.
+  &--art {
+    height: #{rem(58.563)};
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+}

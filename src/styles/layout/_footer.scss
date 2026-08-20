@@ -1,0 +1,95 @@
+@use '../abstracts' as *;
+
+.site-footer {
+  padding-block: #{rem(52)} 0;
+
+  &__rule {
+    height: $border-rule;
+    background-color: var(--c-rule);
+    border: 0;
+    opacity: 1;
+  }
+
+  &__inner {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl);
+
+    @include container;
+
+    @include up('lg') {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+  }
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    gap: #{rem(35)};
+    align-items: flex-start;
+    max-width: #{rem(554.522)};
+  }
+
+  &__wordmark {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: fluid(32, 60);
+    line-height: 1.1;
+    letter-spacing: -2px;
+    color: var(--c-text-heading);
+  }
+
+  &__columns {
+    display: grid;
+    gap: var(--space-md);
+
+    @include up('sm') {
+      grid-template-columns: repeat(2, minmax(0, auto));
+      gap: #{rem(94)};
+    }
+  }
+
+  &__column-title {
+    margin-block-end: var(--space-3xs);
+    font-family: var(--font-utility);
+    font-weight: 300;
+    font-size: fluid(20, 26);
+    line-height: 1.23;
+    letter-spacing: -0.52px;
+  }
+
+  &__column-item {
+    font-size: #{rem(16)};
+    line-height: 2;
+  }
+
+  &__legal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    align-items: flex-start;
+    padding-block: #{rem(28)};
+    font-family: var(--font-utility);
+    font-size: #{rem(16)};
+    line-height: 1.75;
+
+    @include container;
+
+    @include up('md') {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__legal-links {
+    display: flex;
+    gap: #{rem(50)};
+  }
+
+  &__legal-link {
+    text-decoration: underline;
+    text-underline-position: from-font;
+  }
+}

@@ -1,0 +1,67 @@
+@use '../abstracts' as *;
+
+/// Primary CTA. Two Figma sizes: `sm` (Learn More) and `lg` (Reserve My Seat).
+.btn-raahi {
+  display: inline-flex;
+  gap: var(--space-3xs);
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: #{rem(16)};
+  line-height: 1;
+  color: var(--c-cta-ink);
+  text-align: center;
+  background-color: var(--c-cta);
+  border-radius: $radius-btn-sm;
+  transition:
+    transform $dur-base $ease-out-expo,
+    box-shadow $dur-base ease,
+    filter $dur-base ease;
+
+  &--sm {
+    padding: #{rem(17.832)} #{rem(32.422)};
+    border-radius: $radius-btn-sm;
+  }
+
+  &--lg {
+    padding: #{rem(22)} #{rem(40)};
+    border-radius: $radius-lg;
+  }
+
+  &--pill {
+    padding: #{rem(12)} #{rem(20)};
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: #{rem(13)};
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    background-image: linear-gradient(
+      90deg,
+      var(--c-static-sky) 0%,
+      var(--c-cta) 50%,
+      var(--c-static-sky) 100%
+    );
+    background-size: 200% 100%;
+    border-radius: $radius-pill;
+    transition: background-position 400ms ease;
+
+    &:hover {
+      background-position: 100% 0;
+    }
+  }
+
+  &:hover {
+    filter: brightness(1.06);
+    box-shadow: var(--shadow-cta-hover);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--block {
+    width: 100%;
+  }
+}

@@ -1,0 +1,26 @@
+@use '../abstracts' as *;
+
+.u-visually-hidden {
+  @include visually-hidden;
+}
+
+.u-container {
+  @include container;
+}
+
+/// Skip link, revealed on keyboard focus.
+.u-skip-link {
+  position: absolute;
+  top: var(--space-3xs);
+  left: var(--space-3xs);
+  z-index: $z-header + 1;
+  padding: var(--space-2xs) var(--space-xs);
+  color: var(--c-cta-ink);
+  background-color: var(--c-cta);
+  border-radius: $radius-pill;
+  transform: translateY(-200%);
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}

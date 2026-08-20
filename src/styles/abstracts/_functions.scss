@@ -1,0 +1,31 @@
+@use 'sass:math';
+
+/// Viewport bounds the fluid scale interpolates between.
+$fluid-min-vw: 375 !default;
+$fluid-max-vw: 1920 !default;
+
+@function strip-unit($value) {
+  @return math.div($value, ($value * 0 + 1));
+}
+
+/// Convert a px value from the Figma design into rem.
+@function rem($px) {
+  @return math.div(strip-unit($px), 16) * 1rem;
+}
+
+/// Linear interpolation between two px values across the viewport range.
+/// Used for every type step so the design scales continuously rather than
+/// jumping at breakpoints.
+@function fluid($min-px, $max-px, $min-vw: $fluid-min-vw, $max-vw: $fluid-max-vw) {
+  $min: strip-unit($min-px);
+  $max: strip-unit($max-px);
+
+  @if $min == $max {
+    @return rem($min);
+  }
+
+  $slope: math.div($max - $min, $max-vw - $min-vw);
+  $intercept: $min - $slope * $min-vw;
+
+  @return clamp(#{rem($min)}, #{rem($intercept)} + #{$slope * 100}vw, #{rem($max)});
+}

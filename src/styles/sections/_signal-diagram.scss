@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// signal-diagram — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.signal-diagram {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}

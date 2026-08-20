@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// river-journey — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.river-journey {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}

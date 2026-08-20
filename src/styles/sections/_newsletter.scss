@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// newsletter — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.newsletter {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}

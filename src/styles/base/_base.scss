@@ -1,0 +1,23 @@
+@use '../abstracts' as *;
+
+body {
+  font-family: var(--font-body);
+  font-size: fluid(15, 16);
+  line-height: 1.625;
+  color: var(--c-text-body);
+  background-color: var(--c-bg-page);
+  transition:
+    background-color $dur-base ease,
+    color $dur-base ease;
+}
+
+/// The page must never scroll sideways — several sections deliberately
+/// overflow their bounds.
+#root {
+  overflow-x: clip;
+}
+
+::selection {
+  color: var(--c-static-white);
+  background-color: var(--c-accent);
+}

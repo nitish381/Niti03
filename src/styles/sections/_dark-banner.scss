@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// dark-banner — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.dark-banner {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}

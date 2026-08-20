@@ -1,0 +1,88 @@
+@use '../abstracts' as *;
+
+.site-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: $z-header;
+  min-height: var(--header-height);
+  transition:
+    background-color $dur-base ease,
+    backdrop-filter $dur-base ease,
+    min-height $dur-base ease;
+
+  &--scrolled {
+    background-color: rgb(10 9 9 / 85%);
+    backdrop-filter: blur(12px);
+
+    @include up('lg') {
+      min-height: #{rem(76)};
+    }
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: inherit;
+
+    @include container;
+  }
+
+  &__nav {
+    display: none;
+
+    @include up('lg') {
+      display: flex;
+      gap: #{rem(60)};
+      align-items: center;
+    }
+  }
+
+  &__link {
+    position: relative;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: #{rem(14)};
+    letter-spacing: 0.3px;
+    color: var(--c-static-stone);
+    transition: color $dur-fast ease;
+
+    &::after {
+      position: absolute;
+      inset-block-end: -4px;
+      inset-inline-start: 0;
+      width: 100%;
+      height: 1px;
+      background-color: currentcolor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform $dur-base $ease-out-expo;
+      content: '';
+    }
+
+    &:hover,
+    &--active {
+      color: var(--c-static-white);
+    }
+
+    &:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-2xs);
+    align-items: center;
+  }
+
+  &__toggle {
+    display: inline-flex;
+    color: var(--c-static-white);
+
+    @include up('lg') {
+      display: none;
+    }
+  }
+}

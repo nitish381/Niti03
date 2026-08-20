@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// faq — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.faq {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}

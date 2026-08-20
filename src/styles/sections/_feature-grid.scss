@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+/// feature-grid — structural scaffold. Full visual implementation lands in Phase 03,
+/// once the original Figma assets are available.
+.feature-grid {
+  position: relative;
+
+  &__inner {
+    @include container;
+  }
+}
