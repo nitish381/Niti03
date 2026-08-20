@@ -15,25 +15,6 @@
     pointer-events: none;
   }
 
-  &__mountains {
-    position: absolute;
-    inset-block-start: -5%;
-    inset-inline-start: -47%;
-    width: 180%;
-    height: 148%;
-    rotate: 2deg;
-
-    img,
-    .asset-slot {
-      width: 100%;
-      height: 100%;
-    }
-
-    @include up('lg') {
-      inset-inline-start: -32%;
-      width: 150%;
-    }
-  }
 
   /// Bottom fade into #f4ece2 — Figma 111:2109, h 341.47.
   &__fade {
@@ -146,12 +127,16 @@
     }
   }
 
+  /// Figma sets these in #F4ECE2 against the mountain silhouette. With that
+  /// backdrop unavailable, cream on sand would be invisible, so the same
+  /// ghosted-numeral effect is produced with ink at low opacity instead.
   &__index {
     font-family: var(--font-body);
     font-weight: 700;
     font-size: fluid(32, 42.67);
     line-height: 1;
-    color: var(--c-static-cream-alt);
+    color: var(--c-text-heading);
+    opacity: 0.18;
   }
 
   &__card {

@@ -53,17 +53,18 @@ export function Header() {
   return (
     <header className={classes}>
       <div className="site-header__inner">
-        <a className="logo" href="#home" aria-label="Raahi — home">
+        {/* raahi-logo.png is the full lockup — mark plus wordmark — so no
+            wordmark is rendered alongside it. */}
+        <a className="logo" href="#home" aria-label={`${brand.name} — home`}>
           <AssetImage
-            id="raahi-mark"
-            alt=""
-            className="logo__mark"
-            width={54}
-            height={54}
+            id="raahi-logo"
+            alt={brand.name}
+            className="logo__img"
+            width={606}
+            height={410}
             loading="eager"
-            decorative
+            objectFit="contain"
           />
-          <span className="logo__wordmark">{brand.name}</span>
         </a>
 
         <nav className="site-header__nav" aria-label="Primary">

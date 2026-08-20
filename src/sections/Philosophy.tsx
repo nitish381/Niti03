@@ -3,35 +3,30 @@ import { Reveal } from '@/components/Reveal';
 import { philosophy } from '@/content/raahi';
 
 /**
- * Two columns: a dark art card carrying the Gurmukhi calligraphy, and the
- * belief-system copy. Per the Phase 01 motion notes this section is one of the
- * page's rests — reveal only, no parallax.
+ * Two columns: the manifesto card and the belief-system copy.
+ *
+ * `raahi-manifesto-quote-card.png` is the whole left-hand card as designed —
+ * the dark panel, the "Man Jeetai Jag Jeet." title, the gold Gurmukhi
+ * calligraphy and the translation pill with its quote glyphs are all part of
+ * the artwork. It is placed as a single image rather than reassembled, so the
+ * card is never re-typeset.
+ *
+ * Per the Phase 01 motion plan this section is one of the page's rests —
+ * reveal only, no parallax.
  */
 export function Philosophy() {
   return (
     <section id="philosophy" className="philosophy">
       <div className="philosophy__inner">
         <Reveal variant="left" className="philosophy__art">
-          <h3 className="philosophy__art-title">{philosophy.artCard.title}</h3>
-
           <AssetImage
-            id="gurmukhi-calligraphy"
-            alt="Gurmukhi calligraphy rendered in gold"
-            className="philosophy__art-image"
-            width={395}
-            height={395}
+            id="raahi-manifesto-quote-card"
+            alt={`${philosophy.artCard.title} — ${philosophy.artCard.translation}`}
+            className="philosophy__art-img"
+            width={568}
+            height={737}
             objectFit="contain"
           />
-
-          <p className="philosophy__art-quote">
-            <span className="philosophy__quote-glyph philosophy__quote-glyph--open" aria-hidden="true">
-              <AssetImage id="quote-glyph" alt="" objectFit="contain" decorative />
-            </span>
-            {philosophy.artCard.translation}
-            <span className="philosophy__quote-glyph philosophy__quote-glyph--close" aria-hidden="true">
-              <AssetImage id="quote-glyph" alt="" objectFit="contain" decorative />
-            </span>
-          </p>
         </Reveal>
 
         <Reveal variant="right" className="philosophy__copy" delay={100}>
@@ -44,12 +39,11 @@ export function Philosophy() {
             ))}
           </div>
 
+          {/* The check-circle icon (Figma 108:799) was not among the supplied
+              assets, so each row carries no glyph rather than a stand-in. */}
           <ul className="philosophy__checks">
             {philosophy.checks.map((check) => (
               <li key={check} className="philosophy__check">
-                <span className="philosophy__check-icon" aria-hidden="true">
-                  <AssetImage id="check-circle" alt="" objectFit="contain" decorative />
-                </span>
                 {check}
               </li>
             ))}

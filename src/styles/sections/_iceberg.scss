@@ -7,19 +7,6 @@
   padding-block: fluid(64, 120);
   overflow: clip;
 
-  &__texture {
-    position: absolute;
-    inset-block-start: 20%;
-    inset-inline-end: 0;
-    z-index: $z-base;
-    width: #{rem(452)};
-    opacity: 0.5;
-    pointer-events: none;
-
-    @include down('lg') {
-      display: none;
-    }
-  }
 
   &__inner {
     position: relative;
@@ -30,15 +17,11 @@
 
     @include container;
 
-    /// Two columns only from 1280 up. Below that the marker labels — which
-    /// extend outward past the graphic's own box, as they do in Figma — start
-    /// colliding with the copy column, because the available content width
-    /// falls well short of the 1600 the design was drawn on.
-    /// The figure column is given more than the Figma 845:645 split because
-    /// it also has to hold the label gutters on both sides; the copy still
-    /// keeps a comfortable ~65-character measure.
-    @media (min-width: 1280px) {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    /// Back to the Figma 845:645 split from 1024 up. The earlier 1280
+    /// threshold existed because the markers were separate elements that
+    /// overran the graphic's box; they are inside the artwork now.
+    @include up('lg') {
+      grid-template-columns: minmax(0, 845fr) minmax(0, 711fr);
     }
   }
 
@@ -71,156 +54,20 @@
     color: var(--c-text-body);
   }
 
-  /// -- Graphic + markers --------------------------------------------------
-  /// Labels sit outside the graphic's box on both sides, so the figure keeps
-  /// gutters for them to occupy rather than letting them run into neighbours.
-  /// Left labels reach further than right ones, so the gutters are asymmetric.
+  /// -- Graphic: the markers and labels are part of the supplied artwork --
   &__figure {
-    padding-inline: fluid(40, 130) fluid(20, 70);
-
-    @include down('md') {
-      padding-inline: 0;
-    }
+    display: flex;
+    justify-content: center;
   }
 
-  &__graphic {
-    position: relative;
+  &__art {
     width: 100%;
-    max-width: #{rem(644.653)};
-    margin-inline: auto;
-    aspect-ratio: 644.653 / 773.584;
-
-    /// Marker type and rings are sized against the graphic itself, so the
-    /// whole cluster scales as one and keeps the Figma proportions at any
-    /// width instead of crowding as the graphic shrinks.
-    container-type: inline-size;
-
-    @include down('md') {
-      max-width: #{rem(300)};
-    }
+    max-width: #{rem(711)};
   }
 
   &__image {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: contain;
-  }
-
-  &__marker {
-    position: absolute;
-    display: flex;
-    gap: clamp(#{rem(5)}, 1.6cqw, #{rem(10)});
-    align-items: center;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: clamp(#{rem(10)}, 2.48cqw, #{rem(16)});
-    line-height: 1.56;
-    white-space: nowrap;
-
-    /// 24.057px ring on a 644.653px graphic = 3.73cqw.
-    .node-marker {
-      width: clamp(#{rem(13)}, 3.73cqw, #{rem(24.057)});
-      height: clamp(#{rem(13)}, 3.73cqw, #{rem(24.057)});
-      border-width: clamp(2px, 0.47cqw, 3px);
-    }
-    opacity: 0;
-    transform: translateY(8px);
-    transition:
-      opacity $dur-base ease,
-      transform $dur-base $ease-out-expo;
-
-    .is-active & {
-      opacity: 1;
-      transform: none;
-    }
-
-    &--above {
-      color: var(--c-marker-above);
-
-      .node-marker {
-        border-color: var(--c-marker-above);
-      }
-    }
-
-    &--below {
-      color: var(--c-marker-below);
-
-      .node-marker {
-        border-color: var(--c-marker-below);
-      }
-    }
-
-    /// The ring always sits on the side facing the iceberg.
-    &--ring-left {
-      flex-direction: row;
-    }
-
-    &--ring-right {
-      flex-direction: row-reverse;
-      translate: -100% 0;
-    }
-
-    &:hover .node-marker {
-      transform: scale(1.2);
-    }
-
-    &:hover {
-      font-weight: 700;
-    }
-
-    /// Markers detach below 768 — see __lists.
-    @include down('md') {
-      display: none;
-    }
-
-    @include reduced-motion {
-      transition-duration: 1ms;
-      transition-delay: 0ms !important;
-    }
-  }
-
-  /// -- Mobile fallback: two grouped lists ---------------------------------
-  &__lists {
-    display: none;
-    gap: var(--space-md);
-    margin-block-start: var(--space-md);
-
-    @include down('md') {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__list-title {
-    margin-block-end: #{rem(12)};
-    font-family: var(--font-display);
-    font-size: #{rem(22)};
-    line-height: 1.1;
-  }
-
-  &__list--above &__list-title {
-    color: var(--c-marker-above);
-  }
-
-  &__list--below &__list-title {
-    color: var(--c-marker-below);
-  }
-
-  &__list-item {
-    display: flex;
-    gap: #{rem(10)};
-    align-items: center;
-    padding-block: #{rem(6)};
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: #{rem(15)};
-  }
-
-  &__list--above .node-marker {
-    border-color: var(--c-marker-above);
-  }
-
-  &__list--below .node-marker {
-    border-color: var(--c-marker-below);
   }
 }

@@ -109,17 +109,22 @@ mountains, journey panorama). Text, cards and the iceberg are never parallaxed.
 
 ## Asset status
 
-Assets are **not yet exported** — `www.figma.com` is blocked by this
-environment's egress policy. Nothing has been substituted.
+The 18 supplied Raahi assets are integrated, under their original filenames.
 
-`AssetImage` looks each asset up in `src/assets/registry.ts`, which globs
-`src/assets/**` at build time and indexes by filename stem. When an asset is
-missing it renders an empty slot that reserves the exact same box, so the
-composition stays pixel-correct. **Drop the real exports into the folders named
-in the manifest and they appear automatically — no code changes.**
+`AssetImage` looks each one up in `src/assets/registry.ts`, which globs
+`src/assets/**` at build time and indexes by filename stem — so dropping a file
+into the right folder is all it takes to mount it.
 
-There are currently **47 empty slots**. Full inventory, target filenames and the
-exact blocker: **`docs/asset-manifest.md`**.
+Several assets are finished compositions: the hero carries its own fog, glow,
+path and waypoint labels; the iceberg carries all ten markers; the manifesto
+card, the seminar mosaic and the app-showcase band are each a single image. The
+markup that used to draw those pieces has been removed so nothing is drawn
+twice.
+
+**Three slots remain empty** — book covers 04 and 05, and the founder avatar.
+Nothing is substituted for them. Full mapping, the composite breakdown, the
+CSS-only presentation adjustments and everything still outstanding:
+**`docs/asset-manifest.md`**.
 
 ## Verification
 

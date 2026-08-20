@@ -20,7 +20,14 @@ export function RiverJourney() {
   return (
     <section id="journey" className="river-journey">
       <div className="river-journey__panorama" ref={panoramaRef} aria-hidden="true">
-        <AssetImage id="mountain-panorama-tile" alt="" objectFit="cover" decorative />
+        <AssetImage
+          id="raahi-journey-background"
+          alt=""
+          width={1920}
+          height={257}
+          objectFit="cover"
+          decorative
+        />
       </div>
 
       <div className="river-journey__inner">
@@ -36,7 +43,13 @@ export function RiverJourney() {
           ref={ref}
         >
           <div className="river-journey__river" aria-hidden="true">
-            <AssetImage id="river-with-rower" alt="" objectFit="contain" decorative />
+            <AssetImage
+              id="raahi-journey-road"
+              alt="A river winding down through open water, with a single figure rowing a small boat"
+              width={436}
+              height={731}
+              objectFit="contain"
+            />
           </div>
 
           <ol className="river-journey__stops">

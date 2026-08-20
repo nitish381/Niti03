@@ -1,8 +1,8 @@
 @use '../abstracts' as *;
 
-/// Hero — 1920 × 1080 in Figma. Every decorative layer is positioned as a
-/// percentage of the stage, derived from its Figma px offset, so the whole
-/// composition scales together instead of drifting apart.
+/// Hero — `raahi-hero.png` is a finished 1920 × 1080 composition. The job here
+/// is to frame it without cropping away the golden path or either waypoint,
+/// and to keep the headline clear of them.
 .hero {
   position: relative;
   isolation: isolate;
@@ -11,11 +11,11 @@
 
   @include inverse-surface;
 
-  /// Desktop: one viewport, matching the Figma frame proportion.
+  /// Desktop: the artwork fills one viewport, as in Figma.
   @include up('md') {
     display: flex;
     align-items: center;
-    min-height: #{rem(680)};
+    min-height: #{rem(640)};
     height: 100svh;
     max-height: #{rem(1080)};
   }
@@ -27,256 +27,72 @@
     overflow: clip;
     pointer-events: none;
 
-    /// Mobile: the visual becomes a fixed-height crop above the copy.
+    /// Below 768 the composition is shown whole, above the copy, at its own
+    /// aspect ratio — the waypoint labels are painted into the artwork, so
+    /// cropping here would cut the story out of the picture.
     @include down('md') {
       position: relative;
-      height: 62svh;
-      min-height: #{rem(360)};
+      aspect-ratio: 1920 / 1080;
     }
   }
 
-  /// -- Photo: Figma left 37.5, bottom -122.96, 1919.5 × 1202.96, opacity 30% --
-  &__photo {
+  /// Oversized so parallax never exposes an edge.
+  &__art {
     position: absolute;
-    inset-inline-start: 1.95%;
-    inset-block-end: -11.39%;
-    width: 99.97%;
-    height: 111.38%;
+    inset-block-start: -6%;
+    inset-inline: 0;
+    height: 112%;
     opacity: 0;
     transition: opacity 1200ms ease;
 
     .hero--entered & {
-      opacity: 0.3;
+      opacity: 1;
     }
 
     @include down('md') {
-      inset: 0;
-      width: 100%;
-      height: 100%;
-
-      .hero--entered & {
-        opacity: 0.45;
-      }
+      position: static;
+      height: auto;
     }
   }
 
-  &__photo-img {
+  &__art-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 
+    /// Anchored right. When the viewport is narrower than 16:9 the artwork is
+    /// cropped from the left, where it is empty valley and where the headline
+    /// sits anyway — that keeps the golden path and both waypoint labels, which
+    /// are painted into the image, fully on screen.
+    object-position: 100% center;
+
     @include down('md') {
-      object-position: 35% 45%;
+      height: auto;
+      object-fit: fill;
     }
   }
 
-  /// Left-edge black scrim, to 9.926% (Figma gradient stop).
+  /// Deepens the left edge so the headline always has ground to sit on.
+  /// Matches the black-to-transparent scrim in the Figma frame.
   &__scrim {
     position: absolute;
     inset: 0;
     background-image: linear-gradient(
       90deg,
       var(--c-static-black) 0%,
-      rgb(0 0 0 / 0%) 9.926%
+      rgb(0 0 0 / 55%) 28%,
+      rgb(0 0 0 / 0%) 58%
     );
-  }
-
-  /// -- Golden path: inset 22.13% / 19.74% / 25.07% / 54.23% --
-  &__path {
-    position: absolute;
-    inset-inline-start: 54.23%;
-    inset-block-start: 22.13%;
-    width: 26.03%;
-    height: 52.8%;
-    opacity: 0;
-    transform: translateY(12px);
-    transition:
-      opacity 1400ms $ease-out-expo 700ms,
-      transform 1400ms $ease-out-expo 700ms;
-
-    img,
-    .asset-slot {
-      width: 100%;
-      height: 100%;
-    }
-
-    .hero--entered & {
-      opacity: 1;
-      transform: none;
-    }
-
-    /// Below tablet the wide desktop curve does not read; it is replaced by a
-    /// short vertical link between the two waypoints.
-    @include down('lg') {
-      inset-inline-start: 46%;
-      width: 34%;
-    }
 
     @include down('md') {
-      display: none;
+      background-image: linear-gradient(
+        180deg,
+        rgb(0 0 0 / 55%) 0%,
+        rgb(0 0 0 / 0%) 40%
+      );
     }
   }
 
-  /// -- Fog layers --
-  &__fog {
-    position: absolute;
-    opacity: 0;
-    transition: opacity 900ms ease 400ms;
-
-    img,
-    .asset-slot {
-      width: 100%;
-      height: 100%;
-    }
-
-    .hero--entered & {
-      opacity: 1;
-    }
-
-    &--right {
-      inset-inline-start: 33.27%;
-      inset-block-start: 77.7%;
-      width: 66.73%;
-      height: 26.74%;
-      animation: hero-drift-right 20s ease-in-out infinite;
-    }
-
-    &--left {
-      inset-inline-start: -0.1%;
-      inset-block-start: 83.87%;
-      width: 54.6%;
-      height: 20.57%;
-      animation: hero-drift-left 20s ease-in-out infinite;
-    }
-
-    @include reduced-motion {
-      animation: none;
-    }
-  }
-
-  /// -- Horizon glow --
-  &__glow {
-    position: absolute;
-    inset-inline-start: 60.22%;
-    inset-block-start: 1.14%;
-    width: 40.5%;
-    height: 67.3%;
-    opacity: 0;
-    transition: opacity 600ms ease 200ms;
-
-    img,
-    .asset-slot {
-      width: 100%;
-      height: 100%;
-    }
-
-    .hero--entered & {
-      opacity: 1;
-    }
-  }
-
-  /// -- Waypoint markers --
-  &__waypoint {
-    position: absolute;
-    display: flex;
-    gap: #{rem(16)};
-    align-items: center;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: hero-waypoint-in 700ms $ease-out-expo forwards;
-    animation-play-state: paused;
-
-    .hero--entered & {
-      animation-play-state: running;
-    }
-
-    &--here {
-      inset-inline-start: 51.77%;
-      inset-block-start: 72.33%;
-    }
-
-    &--target {
-      inset-inline-start: 76.84%;
-      inset-block-start: 14.88%;
-    }
-
-    /// Pull both markers inward so neither leaves the canvas.
-    @include down('xl') {
-      &--target {
-        inset-inline-start: 68%;
-      }
-    }
-
-    @include down('lg') {
-      &--here {
-        inset-inline-start: 44%;
-        inset-block-start: 70%;
-      }
-
-      &--target {
-        inset-inline-start: 58%;
-        inset-block-start: 12%;
-      }
-    }
-
-    /// Mobile: two stacked labels pinned to the crop, compass at 64px.
-    @include down('md') {
-      inset-inline-start: var(--container-gutter) !important;
-      gap: #{rem(12)};
-
-      &--here {
-        inset-block-start: auto;
-        inset-block-end: #{rem(20)};
-      }
-
-      &--target {
-        inset-block-start: #{rem(20)};
-      }
-    }
-
-    @include reduced-motion {
-      animation-duration: 1ms;
-    }
-  }
-
-  &__waypoint-icon {
-    display: block;
-    flex-shrink: 0;
-    width: fluid(64, 116);
-
-    img,
-    .asset-slot {
-      width: 100%;
-      aspect-ratio: 116 / 117;
-    }
-  }
-
-  &__waypoint-text {
-    display: flex;
-    flex-direction: column;
-    gap: fluid(6, 20);
-    max-width: #{rem(229)};
-  }
-
-  &__waypoint-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: fluid(18, 30);
-    line-height: 1;
-    letter-spacing: 1.8px;
-    color: var(--c-static-cloud);
-  }
-
-  &__waypoint-meta {
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: fluid(12, 16);
-    line-height: 1.2;
-    letter-spacing: 1px;
-    color: var(--c-static-white);
-  }
-
-  /// -- Copy block: Figma left 160, top 295.97, width 810 --
   &__inner {
     position: relative;
     z-index: $z-content;
@@ -292,9 +108,14 @@
   &__copy {
     display: flex;
     flex-direction: column;
-    gap: fluid(32, 60);
+    gap: fluid(28, 60);
     align-items: flex-start;
     max-width: #{rem(810)};
+
+    /// Keep the headline clear of the golden path on mid widths.
+    @include between('md', 'xl') {
+      max-width: #{rem(540)};
+    }
   }
 
   &__title {
@@ -303,11 +124,12 @@
     font-size: fluid(40, 120);
     line-height: 1.05;
     color: var(--c-static-white);
+    text-shadow: 0 2px 40px rgb(0 0 0 / 45%);
     opacity: 0;
     transform: translateY(20px);
     transition:
-      opacity 900ms $ease-out-expo 400ms,
-      transform 900ms $ease-out-expo 400ms;
+      opacity 900ms $ease-out-expo 300ms,
+      transform 900ms $ease-out-expo 300ms;
 
     .hero--entered & {
       opacity: 1;
@@ -323,11 +145,12 @@
     font-size: fluid(16, 18);
     line-height: 1.5;
     color: var(--c-static-stone);
+    text-shadow: 0 1px 20px rgb(0 0 0 / 55%);
     opacity: 0;
     transform: translateY(20px);
     transition:
-      opacity 900ms $ease-out-expo 600ms,
-      transform 900ms $ease-out-expo 600ms;
+      opacity 900ms $ease-out-expo 500ms,
+      transform 900ms $ease-out-expo 500ms;
 
     .hero--entered & {
       opacity: 1;
@@ -339,8 +162,8 @@
     opacity: 0;
     transform: translateY(20px);
     transition:
-      opacity 900ms $ease-out-expo 800ms,
-      transform 900ms $ease-out-expo 800ms,
+      opacity 900ms $ease-out-expo 700ms,
+      transform 900ms $ease-out-expo 700ms,
       filter $dur-base ease,
       box-shadow $dur-base ease;
 
@@ -350,12 +173,8 @@
     }
   }
 
-  /// Reduced motion: everything arrives immediately, nothing travels.
   @include reduced-motion {
-    .hero__photo,
-    .hero__path,
-    .hero__fog,
-    .hero__glow,
+    .hero__art,
     .hero__title,
     .hero__body,
     .hero__cta {
@@ -363,34 +182,5 @@
       transition-delay: 0ms;
       transform: none;
     }
-  }
-}
-
-@keyframes hero-waypoint-in {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes hero-drift-right {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  50% {
-    translate: 12px 0;
-  }
-}
-
-@keyframes hero-drift-left {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  50% {
-    translate: -12px 0;
   }
 }

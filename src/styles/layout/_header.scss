@@ -125,31 +125,18 @@
   }
 }
 
-/// Brand lockup.
+/// Brand lockup. `raahi-logo.png` carries the mark and the wordmark together,
+/// with roughly a quarter of transparent padding above and below, so the box is
+/// sized taller than the visible artwork.
 .logo {
   display: inline-flex;
-  gap: #{rem(10.213)};
   align-items: center;
-  padding-block: #{rem(16)};
-  color: var(--c-static-white);
+  padding-block: #{rem(6)};
 
-  @include up('lg') {
-    padding-block: #{rem(24)};
-  }
-
-  &__mark {
-    width: fluid(40, 54.269);
-    height: fluid(40, 54.269);
+  &__img {
+    width: auto;
+    height: fluid(56, 78);
     object-fit: contain;
-    border-radius: 12px;
-  }
-
-  &__wordmark {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: fluid(28, 39.28);
-    line-height: 1;
-    letter-spacing: -0.9032px;
   }
 }
 

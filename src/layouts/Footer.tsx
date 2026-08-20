@@ -8,12 +8,16 @@ export function Footer() {
 
       <div className="site-footer__inner">
         <div className="site-footer__brand">
+          {/* The supplied lockup is white artwork. The footer sits on sand, so
+              it is tinted to the ink colour with a filter — presentation only,
+              the file itself is untouched. */}
           <AssetImage
-            id="raahi-mark"
+            id="raahi-logo"
             alt=""
             className="site-footer__mark"
-            width={54}
-            height={54}
+            width={606}
+            height={410}
+            objectFit="contain"
             decorative
           />
           <p className="site-footer__wordmark">{footer.tagline}</p>

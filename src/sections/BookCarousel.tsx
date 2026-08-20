@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AssetImage } from '@/components/AssetImage';
 import { Reveal } from '@/components/Reveal';
-import { useParallax } from '@/hooks/useParallax';
 import { library } from '@/content/raahi';
 
+/**
+ * Covers, in slide order. Only three were supplied; slides 04 and 05 keep their
+ * place in the rail — the design calls for five — and render an empty cover
+ * until their artwork arrives. Nothing is substituted for them.
+ */
 const BOOK_ASSETS = [
-  'book-01-discipline-of-attention',
-  'book-02-work-that-matters',
-  'book-03-ladder-within',
-  'book-04-beyond-first-flight',
-  'book-05-code-courage-clarity',
+  'raahi-book-discipline-of-attention',
+  'raahi-book-work-that-matters',
+  'raahi-book-ladder-within',
+  '',
+  '',
 ];
 
 /**
@@ -22,7 +26,6 @@ const BOOK_ASSETS = [
  */
 export function BookCarousel() {
   const trackRef = useRef<HTMLUListElement>(null);
-  const mountainRef = useParallax<HTMLDivElement>(0.1, { max: 90 });
 
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -94,10 +97,12 @@ export function BookCarousel() {
 
   return (
     <section id="the-app" className="book-carousel">
+      {/* Figma layers a tall mountain silhouette behind this section
+          (node 111:2096). No artwork for it was supplied — the thin
+          `raahi-journey-background` strip belongs to the Journey section and
+          would have to be stretched to stand in here — so only the gradient
+          fade into the page ground is drawn. */}
       <div className="book-carousel__decor" aria-hidden="true">
-        <div className="book-carousel__mountains" ref={mountainRef}>
-          <AssetImage id="mountain-silhouette" alt="" objectFit="cover" decorative />
-        </div>
         <span className="book-carousel__fade" />
       </div>
 
@@ -108,12 +113,21 @@ export function BookCarousel() {
             <p className="book-carousel__lede">{library.body}</p>
           </Reveal>
 
+          {/* No store-badge artwork was supplied, so these render as the same
+              bordered badge used in the download band rather than as a
+              stand-in for the official Apple and Google marks. */}
           <Reveal className="book-carousel__badges" delay={100}>
-            <a className="app-badge app-badge--art" href="#" aria-label="Get it on Google Play">
-              <AssetImage id="badge-google-play" alt="" width={169} height={59} decorative />
+            <a className="app-badge app-badge--google" href="#" aria-label="Get it on Google Play">
+              <span className="app-badge__text">
+                <span className="app-badge__kicker">Get it On</span>
+                <span className="app-badge__store">Google Play</span>
+              </span>
             </a>
-            <a className="app-badge app-badge--art" href="#" aria-label="Download on the App Store">
-              <AssetImage id="badge-app-store" alt="" width={174} height={59} decorative />
+            <a className="app-badge app-badge--apple" href="#" aria-label="Download on the App Store">
+              <span className="app-badge__text">
+                <span className="app-badge__kicker">Download on the</span>
+                <span className="app-badge__store">App Store</span>
+              </span>
             </a>
           </Reveal>
         </div>
@@ -128,7 +142,7 @@ export function BookCarousel() {
                     id={BOOK_ASSETS[index] ?? ''}
                     alt={slide.title}
                     className="book-carousel__cover"
-                    width={444}
+                    width={445}
                     height={643}
                     objectFit="contain"
                   />

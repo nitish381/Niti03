@@ -3,10 +3,10 @@ import { Reveal } from '@/components/Reveal';
 import { features } from '@/content/raahi';
 
 const ICONS = [
-  'feature-adaptive-literature',
-  'feature-decision-points',
-  'feature-moments',
-  'feature-calibration',
+  'raahi-feature-adaptive-literature',
+  'raahi-feature-playable-decisions',
+  'raahi-feature-moments-that-matter',
+  'raahi-feature-reflective-calibration',
 ];
 
 /**
@@ -37,8 +37,8 @@ export function FeatureGrid() {
                 <AssetImage
                   id={ICONS[index] ?? ''}
                   alt=""
-                  width={93}
-                  height={93}
+                  width={94}
+                  height={94}
                   objectFit="contain"
                   decorative
                 />

@@ -1,6 +1,7 @@
 import { AssetImage } from '@/components/AssetImage';
 import { Reveal } from '@/components/Reveal';
 import { useReveal } from '@/hooks/useReveal';
+import { useParallax } from '@/hooks/useParallax';
 import { signalDiagram } from '@/content/raahi';
 
 interface SignalLabelProps {
@@ -19,65 +20,64 @@ function SignalLabel({ label, value, position }: SignalLabelProps) {
 }
 
 /**
- * Radial four-signal composition: a squircle photo at the centre with dashed
- * connectors running out to N / E / S / W labels. On entry the connectors draw
- * outward from the centre with a 100ms stagger.
+ * Radial four-signal composition.
  *
- * Below 768 the radial layout is abandoned for a 2 × 2 label grid under the
- * photo — the connectors carry no meaning once the axes collapse.
+ * `raahi-personal-map-visual.png` already carries the white squircle frame, so
+ * no border or radius is applied over it. The connectors are dashed rules with
+ * a ring terminal — a line and a circle in the design, so they are drawn in CSS
+ * rather than shipped as files. On entry they draw outward from the centre.
  */
 export function SignalDiagram() {
   const { ref, visible } = useReveal<HTMLDivElement>({ threshold: 0.25 });
-
+  const photoRef = useParallax<HTMLDivElement>(0.04, { max: 26 });
   const [top, right, bottom, left] = signalDiagram.points;
 
   return (
     <section className="signal-diagram">
       <div
-        className={[
-          'signal-diagram__inner',
-          visible ? 'is-drawn' : '',
-        ]
+        className={['signal-diagram__inner', visible ? 'is-drawn' : '']
           .filter(Boolean)
           .join(' ')}
         ref={ref}
       >
         <SignalLabel label={top.label} value={top.value} position="top" />
-
-        <span className="signal-diagram__connector signal-diagram__connector--top" aria-hidden="true">
-          <AssetImage id="connector-vertical-top" alt="" objectFit="contain" decorative />
-        </span>
+        <span
+          className="signal-diagram__connector signal-diagram__connector--top"
+          aria-hidden="true"
+        />
 
         <SignalLabel label={left.label} value={left.value} position="left" />
-
-        <span className="signal-diagram__connector signal-diagram__connector--left" aria-hidden="true">
-          <AssetImage id="connector-horizontal-left" alt="" objectFit="contain" decorative />
-        </span>
+        <span
+          className="signal-diagram__connector signal-diagram__connector--left"
+          aria-hidden="true"
+        />
 
         <Reveal variant="scale" className="signal-diagram__figure">
+          <div className="signal-diagram__photo-wrap" ref={photoRef}>
           <AssetImage
-            id="signal-crossroads"
-            alt="A child with a telescope standing at a four-way crossroads, seen from above"
+            id="raahi-personal-map-visual"
+            alt="A young person with a telescope standing at the centre of a four-way crossroads, seen from directly above"
             className="signal-diagram__photo"
-            width={448}
-            height={450}
-            objectPosition="50% 50%"
+            width={480}
+            height={482}
+            objectFit="contain"
           />
+          </div>
           <span className="signal-diagram__centre" aria-hidden="true">
             {signalDiagram.centreLabel}
           </span>
         </Reveal>
 
-        <span className="signal-diagram__connector signal-diagram__connector--right" aria-hidden="true">
-          <AssetImage id="connector-horizontal-right" alt="" objectFit="contain" decorative />
-        </span>
-
+        <span
+          className="signal-diagram__connector signal-diagram__connector--right"
+          aria-hidden="true"
+        />
         <SignalLabel label={right.label} value={right.value} position="right" />
 
-        <span className="signal-diagram__connector signal-diagram__connector--bottom" aria-hidden="true">
-          <AssetImage id="connector-vertical-bottom" alt="" objectFit="contain" decorative />
-        </span>
-
+        <span
+          className="signal-diagram__connector signal-diagram__connector--bottom"
+          aria-hidden="true"
+        />
         <SignalLabel label={bottom.label} value={bottom.value} position="bottom" />
       </div>
     </section>

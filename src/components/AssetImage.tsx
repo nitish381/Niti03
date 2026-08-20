@@ -42,6 +42,11 @@ export function AssetImage({
   };
 
   if (!src) {
+    // A decorative asset that was never supplied simply isn't drawn — an empty
+    // box in place of an icon reads as a bug. Meaningful images still reserve
+    // their space so the composition around them stays correct.
+    if (decorative) return null;
+
     return (
       <span
         className={[

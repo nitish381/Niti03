@@ -37,20 +37,24 @@
     grid-row: 3;
     width: 100%;
     max-width: #{rem(448)};
-    aspect-ratio: 447.904 / 449.58;
-    border: fluid(8, 16) solid rgb(255 255 255 / 60%);
-    border-radius: fluid(48, 93);
-    overflow: hidden;
+    /// The white squircle frame is part of the supplied artwork — no border
+    /// or radius is added over it.
+    aspect-ratio: 480 / 482;
 
     @include down('md') {
       max-width: #{rem(320)};
     }
   }
 
+  &__photo-wrap {
+    width: 100%;
+    height: 100%;
+  }
+
   &__photo {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   &__centre {
@@ -127,53 +131,87 @@
     white-space: nowrap;
   }
 
-  /// -- Connectors: draw outward from the centre on entry --
+  /// -- Connectors: dashed rules with a ring terminal, drawn in CSS ------
   &__connector {
+    position: relative;
     display: block;
     transition: transform 400ms $ease-out-expo;
 
-    img,
-    .asset-slot {
-      width: 100%;
-      height: 100%;
+    /// Ring terminal at the end nearest the centre.
+    &::after {
+      position: absolute;
+      width: #{rem(14)};
+      height: #{rem(14)};
+      border: 2px solid var(--c-accent);
+      border-radius: 50%;
+      background-color: var(--c-bg-page);
+      content: '';
     }
 
     &--left,
     &--right {
       grid-row: 3;
       width: 100%;
-      height: #{rem(24.036)};
+      height: 0;
+      border-block-start: 1px dashed var(--c-accent);
       transform: scaleX(0);
+
+      &::after {
+        inset-block-start: 50%;
+        translate: 0 -50%;
+      }
     }
 
     &--left {
       grid-column: 2;
       transform-origin: right center;
+
+      &::after {
+        inset-inline-end: 0;
+      }
     }
 
     &--right {
       grid-column: 4;
       transform-origin: left center;
+
+      &::after {
+        inset-inline-start: 0;
+      }
     }
 
     &--top,
     &--bottom {
       grid-column: 3;
-      width: #{rem(24.057)};
+      width: 0;
       height: 100%;
+      border-inline-start: 1px dashed var(--c-accent);
       transform: scaleY(0);
+
+      &::after {
+        inset-inline-start: 50%;
+        translate: -50% 0;
+      }
     }
 
     &--top {
       grid-row: 2;
       transform-origin: center bottom;
       transition-delay: 100ms;
+
+      &::after {
+        inset-block-end: 0;
+      }
     }
 
     &--bottom {
       grid-row: 4;
       transform-origin: center top;
       transition-delay: 300ms;
+
+      &::after {
+        inset-block-start: 0;
+      }
     }
 
     .is-drawn &--left,

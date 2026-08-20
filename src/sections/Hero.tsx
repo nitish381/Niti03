@@ -3,45 +3,21 @@ import { AssetImage } from '@/components/AssetImage';
 import { useParallax } from '@/hooks/useParallax';
 import { hero } from '@/content/raahi';
 
-interface WaypointProps {
-  title: string;
-  meta: string;
-  place: 'here' | 'target';
-  delay: number;
-}
-
-function Waypoint({ title, meta, place, delay }: WaypointProps) {
-  return (
-    <div
-      className={`hero__waypoint hero__waypoint--${place}`}
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <span className="hero__waypoint-icon">
-        <AssetImage id="waypoint-compass" alt="" width={116} height={117} decorative />
-      </span>
-      <span className="hero__waypoint-text">
-        <span className="hero__waypoint-title">{title}</span>
-        <span className="hero__waypoint-meta">{meta}</span>
-      </span>
-    </div>
-  );
-}
-
 /**
- * Cinematic opener. Layer order bottom → top, exactly as in Figma:
- * black base → photo @30% + left scrim → golden path → two fog layers →
- * horizon glow → waypoints → copy.
+ * Cinematic opener.
  *
- * The photo and fog drift at different rates on scroll, which is what gives the
- * section its depth.
+ * `raahi-hero.png` is the complete composition as delivered — photograph, fog,
+ * horizon glow, the golden path and both waypoint markers with their labels are
+ * all part of the artwork. Nothing is layered on top of it and nothing is
+ * redrawn; the only overlay is the headline block, which sits to the left where
+ * the artwork is deliberately empty.
+ *
+ * Parallax moves the artwork as a whole. It is never scaled non-uniformly or
+ * cropped in a way that loses the path or the markers.
  */
 export function Hero() {
   const [entered, setEntered] = useState(false);
-
-  const photoRef = useParallax<HTMLDivElement>(0.15, { max: 120 });
-  const fogRightRef = useParallax<HTMLDivElement>(0.35, { max: 160 });
-  const fogLeftRef = useParallax<HTMLDivElement>(0.28, { max: 140 });
-  const glowRef = useParallax<HTMLDivElement>(0.1, { max: 80 });
+  const artRef = useParallax<HTMLDivElement>(0.12, { max: 90 });
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setEntered(true));
@@ -53,46 +29,19 @@ export function Hero() {
       id="home"
       className={['hero', entered ? 'hero--entered' : ''].filter(Boolean).join(' ')}
     >
-      <div className="hero__stage" aria-hidden="true">
-        <div className="hero__photo" ref={photoRef}>
+      <div className="hero__stage">
+        <div className="hero__art" ref={artRef}>
           <AssetImage
-            id="hero-mountain-valley"
-            alt=""
-            className="hero__photo-img"
+            id="raahi-hero"
+            alt="A lone figure on a ridge above a valley of cloud, with a golden path curving up toward a distant summit. Two waypoints are marked: “You are here — Story 01, The Fog”, and “Target identity — 100 stories ahead”."
+            className="hero__art-img"
+            width={1920}
+            height={1080}
             loading="eager"
-            objectPosition="50% 50%"
-            decorative
+            objectFit="cover"
           />
-          <span className="hero__scrim" />
         </div>
-
-        <div className="hero__path">
-          <AssetImage id="hero-golden-path" alt="" objectFit="contain" decorative />
-        </div>
-
-        <div className="hero__fog hero__fog--right" ref={fogRightRef}>
-          <AssetImage id="hero-fog-right" alt="" objectFit="contain" decorative />
-        </div>
-        <div className="hero__fog hero__fog--left" ref={fogLeftRef}>
-          <AssetImage id="hero-fog-left" alt="" objectFit="contain" decorative />
-        </div>
-
-        <div className="hero__glow" ref={glowRef}>
-          <AssetImage id="hero-horizon-glow" alt="" objectFit="contain" decorative />
-        </div>
-
-        <Waypoint
-          title={hero.waypoints[0].title}
-          meta={hero.waypoints[0].meta}
-          place="here"
-          delay={1800}
-        />
-        <Waypoint
-          title={hero.waypoints[1].title}
-          meta={hero.waypoints[1].meta}
-          place="target"
-          delay={2100}
-        />
+        <span className="hero__scrim" aria-hidden="true" />
       </div>
 
       <div className="hero__inner">

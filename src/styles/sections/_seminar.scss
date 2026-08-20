@@ -17,62 +17,21 @@
     }
   }
 
-  /// Tall portrait left; crowd over group on the right. 10px gutters.
+  /// The three-photo mosaic arrives as one composed image.
   &__mosaic {
-    display: grid;
-    gap: #{rem(10)};
-    grid-template-columns: 393.47fr 355.7fr;
-    grid-template-rows: 265fr 361fr;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__mosaic-inner {
+    width: 100%;
   }
 
   &__photo {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: fluid(12, 20);
-
-    &--tall {
-      grid-row: 1 / span 2;
-      grid-column: 1;
-      aspect-ratio: 393.47 / 636;
-    }
-
-    &--wide {
-      grid-column: 2;
-      grid-row: 1;
-      aspect-ratio: 355.7 / 265;
-    }
-
-    &--group {
-      grid-column: 2;
-      grid-row: 2;
-      aspect-ratio: 355.7 / 361;
-    }
-  }
-
-  /// Below 768: portrait full width, the two smaller shots side by side under it.
-  @include down('md') {
-    &__mosaic {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-    }
-
-    &__photo--tall {
-      grid-row: 1;
-      grid-column: 1 / span 2;
-      aspect-ratio: 16 / 11;
-    }
-
-    &__photo--wide {
-      grid-row: 2;
-      grid-column: 1;
-    }
-
-    &__photo--group {
-      grid-row: 2;
-      grid-column: 2;
-      aspect-ratio: 355.7 / 265;
-    }
+    max-width: #{rem(760)};
+    height: auto;
+    object-fit: contain;
   }
 
   &__copy {

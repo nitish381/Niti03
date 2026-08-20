@@ -1,5 +1,6 @@
 import { AssetImage } from '@/components/AssetImage';
 import { Reveal } from '@/components/Reveal';
+import { useParallax } from '@/hooks/useParallax';
 import { seminar } from '@/content/raahi';
 
 /**
@@ -8,34 +9,25 @@ import { seminar } from '@/content/raahi';
  * 10px gutters.
  */
 export function Seminar() {
+  const mosaicRef = useParallax<HTMLDivElement>(0.05, { max: 36 });
+
   return (
     <section className="seminar">
       <div className="seminar__inner">
+        {/* `raahi-founder-story.png` is the finished three-photo mosaic —
+            portrait, audience and group with their gutters and corners already
+            composed. It is placed whole rather than rebuilt from tiles. */}
         <Reveal variant="left" className="seminar__mosaic">
+          <div className="seminar__mosaic-inner" ref={mosaicRef}>
           <AssetImage
-            id="seminar-founder-stage"
-            alt="The founder speaking on stage at a Raahi seminar"
-            className="seminar__photo seminar__photo--tall"
-            width={393}
+            id="raahi-founder-story"
+            alt="Three photographs from a Raahi seminar: the founder speaking from a chair on stage, a full auditorium of attendees, and speakers standing together on stage afterwards"
+            className="seminar__photo"
+            width={760}
             height={636}
-            objectPosition="50% 30%"
+            objectFit="contain"
           />
-          <AssetImage
-            id="seminar-audience"
-            alt="Seminar attendees listening from the audience"
-            className="seminar__photo seminar__photo--wide"
-            width={356}
-            height={265}
-            objectPosition="50% 45%"
-          />
-          <AssetImage
-            id="seminar-group"
-            alt="Attendees gathered together on stage after the session"
-            className="seminar__photo seminar__photo--group"
-            width={356}
-            height={361}
-            objectPosition="50% 40%"
-          />
+          </div>
         </Reveal>
 
         <Reveal variant="right" className="seminar__copy" delay={100}>
