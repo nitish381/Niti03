@@ -97,17 +97,6 @@
     display: flex;
     gap: #{rem(16)};
     align-items: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity $dur-slow $ease-out-expo,
-      transform $dur-slow $ease-out-expo;
-
-    .is-active & {
-      opacity: 1;
-      transform: none;
-    }
-
     /// Desktop: alternate sides of the river.
     @include up('md') {
       width: calc(50% - #{rem(120)});
@@ -129,10 +118,6 @@
       padding-inline-start: #{rem(110)};
     }
 
-    @include reduced-motion {
-      transition-duration: 1ms;
-      transition-delay: 0ms !important;
-    }
   }
 
   /// Dashed leader from the river out to the label.

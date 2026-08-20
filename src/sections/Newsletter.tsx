@@ -1,9 +1,28 @@
 import { useState, type FormEvent } from 'react';
-import { Reveal } from '@/components/Reveal';
+import { gsap } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
+import { parallax, reveal } from '@/lib/scroll/scenes';
 import { newsletter } from '@/content/raahi';
 
 export function Newsletter() {
   const [done, setDone] = useState(false);
+
+  /** The closing beat. The glow expands behind the words as the section
+   *  arrives, so the page ends on a widening rather than a stop. */
+  const ref = useScrollScene<HTMLElement>((root) => {
+    const glow = root.querySelector('.newsletter__glow');
+
+    gsap.from(glow, {
+      scale: 0.72,
+      autoAlpha: 0,
+      duration: 1.6,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: root, start: 'top 85%', once: true },
+    });
+    if (glow) parallax(glow, 44, root);
+
+    reveal(root, gsap.utils.toArray('[data-news] > *', root), { y: 30, stagger: 0.11 });
+  });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -12,16 +31,16 @@ export function Newsletter() {
   };
 
   return (
-    <section className="newsletter">
+    <section className="newsletter" ref={ref}>
       <div className="newsletter__glow" aria-hidden="true" />
 
-      <div className="newsletter__inner">
-        <Reveal className="newsletter__head">
+      <div className="newsletter__inner" data-news>
+        <div className="newsletter__head">
           <p className="newsletter__eyebrow">{newsletter.eyebrow}</p>
           <h2 className="newsletter__title">{newsletter.title}</h2>
-        </Reveal>
+        </div>
 
-        <Reveal className="newsletter__form" delay={100}>
+        <div className="newsletter__form">
           <form onSubmit={onSubmit} className="newsletter__field">
             <label className="u-visually-hidden" htmlFor="newsletter-email">
               {newsletter.placeholder}
@@ -39,7 +58,7 @@ export function Newsletter() {
               {done ? '✓' : newsletter.cta}
             </button>
           </form>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

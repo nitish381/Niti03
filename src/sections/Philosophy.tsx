@@ -1,5 +1,7 @@
 import { AssetImage } from '@/components/AssetImage';
-import { Reveal } from '@/components/Reveal';
+import { gsap } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
+import { parallax, reveal } from '@/lib/scroll/scenes';
 import { philosophy } from '@/content/raahi';
 
 /**
@@ -15,10 +17,28 @@ import { philosophy } from '@/content/raahi';
  * reveal only, no parallax.
  */
 export function Philosophy() {
+  /** A rest in the page. The card is uncovered from the side and drifts a
+   *  little slower than the copy; nothing else moves. */
+  const ref = useScrollScene<HTMLElement>((root) => {
+    const art = root.querySelector('[data-philosophy="art"]');
+    const copy = gsap.utils.toArray<HTMLElement>('[data-philosophy="copy"] > *', root);
+
+    gsap.from(art, {
+      x: -46,
+      autoAlpha: 0,
+      duration: 1.15,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: root, start: 'top 76%', once: true },
+    });
+    if (art) parallax(art, -30, root);
+
+    reveal(root, copy, { y: 28, stagger: 0.09, start: 'top 72%' });
+  });
+
   return (
-    <section id="philosophy" className="philosophy">
+    <section id="philosophy" className="philosophy" ref={ref}>
       <div className="philosophy__inner">
-        <Reveal variant="left" className="philosophy__art">
+        <div className="philosophy__art" data-philosophy="art">
           <AssetImage
             id="raahi-manifesto-quote-card"
             alt={`${philosophy.artCard.title} — ${philosophy.artCard.translation}`}
@@ -27,9 +47,9 @@ export function Philosophy() {
             height={737}
             objectFit="contain"
           />
-        </Reveal>
+        </div>
 
-        <Reveal variant="right" className="philosophy__copy" delay={100}>
+        <div className="philosophy__copy" data-philosophy="copy">
           <p className="philosophy__eyebrow">{philosophy.eyebrow}</p>
           <h2 className="philosophy__title">{philosophy.title}</h2>
 
@@ -52,7 +72,7 @@ export function Philosophy() {
           <a className="btn-raahi btn-raahi--sm" href="#the-app">
             {philosophy.cta}
           </a>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

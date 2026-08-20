@@ -1,6 +1,7 @@
 import { AssetImage } from '@/components/AssetImage';
-import { Reveal } from '@/components/Reveal';
-import { useParallax } from '@/hooks/useParallax';
+import { gsap } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
+import { parallax, reveal, scrollWipe } from '@/lib/scroll/scenes';
 import { seminar } from '@/content/raahi';
 
 /**
@@ -9,16 +10,31 @@ import { seminar } from '@/content/raahi';
  * 10px gutters.
  */
 export function Seminar() {
-  const mosaicRef = useParallax<HTMLDivElement>(0.05, { max: 36 });
+  /**
+   * The mosaic is uncovered rather than faded in: a wipe from the top edge, so
+   * the three photographs resolve as the reader arrives. The copy beside it
+   * staggers in slightly later and travels a shorter distance, which reads as
+   * the images being further away.
+   */
+  const ref = useScrollScene<HTMLElement>((root) => {
+    const mosaic = root.querySelector('[data-seminar="mosaic"]');
+    const photo = root.querySelector('.seminar__photo');
+    const copy = gsap.utils.toArray<HTMLElement>('[data-seminar="copy"] > *', root);
+
+    if (photo) scrollWipe(photo, root, { start: 'top 80%', end: 'top 30%', from: 46 });
+    if (mosaic) parallax(mosaic, -40, root);
+
+    reveal(root, copy, { y: 30, stagger: 0.1, start: 'top 74%' });
+  });
 
   return (
-    <section className="seminar">
+    <section className="seminar" ref={ref}>
       <div className="seminar__inner">
         {/* `raahi-founder-story.png` is the finished three-photo mosaic —
             portrait, audience and group with their gutters and corners already
             composed. It is placed whole rather than rebuilt from tiles. */}
-        <Reveal variant="left" className="seminar__mosaic">
-          <div className="seminar__mosaic-inner" ref={mosaicRef}>
+        <div className="seminar__mosaic">
+          <div className="seminar__mosaic-inner" data-seminar="mosaic">
           <AssetImage
             id="raahi-founder-story"
             alt="Three photographs from a Raahi seminar: the founder speaking from a chair on stage, a full auditorium of attendees, and speakers standing together on stage afterwards"
@@ -28,9 +44,9 @@ export function Seminar() {
             objectFit="contain"
           />
           </div>
-        </Reveal>
+        </div>
 
-        <Reveal variant="right" className="seminar__copy" delay={100}>
+        <div className="seminar__copy" data-seminar="copy">
           <ul className="seminar__meta">
             {seminar.meta.map((item) => (
               <li key={item} className="seminar__meta-item">
@@ -50,7 +66,7 @@ export function Seminar() {
           <a className="btn-raahi btn-raahi--lg" href="#the-app">
             {seminar.cta}
           </a>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

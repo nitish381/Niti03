@@ -1,36 +1,54 @@
-import { useEffect, useState } from 'react';
 import { AssetImage } from '@/components/AssetImage';
-import { useParallax } from '@/hooks/useParallax';
+import { gsap, EASE_ENTER, EASE_SCRUB } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
 import { hero } from '@/content/raahi';
 
 /**
  * Cinematic opener.
  *
  * `raahi-hero.png` is the complete composition as delivered — photograph, fog,
- * horizon glow, the golden path and both waypoint markers with their labels are
- * all part of the artwork. Nothing is layered on top of it and nothing is
- * redrawn; the only overlay is the headline block, which sits to the left where
- * the artwork is deliberately empty.
+ * horizon glow, golden path and both waypoint markers are painted into the one
+ * file — so the atmosphere cannot be split into separately moving planes.
+ * Depth is built from the layers that *are* separable: the artwork, the scrim
+ * over it, and the copy, each travelling at a different rate.
  *
- * Parallax moves the artwork as a whole. It is never scaled non-uniformly or
- * cropped in a way that loses the path or the markers.
+ * On load the frame settles out of a slight over-scale. On scroll the artwork
+ * drifts down slowly while the copy lifts away faster and dims — the parallax
+ * differential that makes the viewer feel they are moving past the scene rather
+ * than watching it slide.
  */
 export function Hero() {
-  const [entered, setEntered] = useState(false);
-  const artRef = useParallax<HTMLDivElement>(0.12, { max: 90 });
+  const ref = useScrollScene<HTMLElement>((root) => {
+    const art = root.querySelector('[data-hero="art"]');
+    const scrim = root.querySelector('[data-hero="scrim"]');
+    const copy = gsap.utils.toArray<HTMLElement>('[data-hero="line"]', root);
 
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setEntered(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
+    // -- Entrance -----------------------------------------------------------
+    gsap
+      .timeline({ defaults: { ease: EASE_ENTER } })
+      .from(art, { autoAlpha: 0, scale: 1.08, duration: 1.6 })
+      .from(copy, { yPercent: 40, autoAlpha: 0, duration: 1.1, stagger: 0.12 }, 0.35);
+
+    // -- Scroll: three planes, three rates ----------------------------------
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
+        defaults: { ease: EASE_SCRUB },
+      })
+      .to(art, { yPercent: 12, scale: 1.06 }, 0)
+      .to(scrim, { opacity: 1.35 }, 0)
+      .to(copy, { yPercent: -70, autoAlpha: 0, stagger: 0.02 }, 0);
+  });
 
   return (
-    <section
-      id="home"
-      className={['hero', entered ? 'hero--entered' : ''].filter(Boolean).join(' ')}
-    >
+    <section id="home" className="hero" ref={ref}>
       <div className="hero__stage">
-        <div className="hero__art" ref={artRef}>
+        <div className="hero__art" data-hero="art">
           <AssetImage
             id="raahi-hero"
             alt="A lone figure on a ridge above a valley of cloud, with a golden path curving up toward a distant summit. Two waypoints are marked: “You are here — Story 01, The Fog”, and “Target identity — 100 stories ahead”."
@@ -41,20 +59,24 @@ export function Hero() {
             objectFit="cover"
           />
         </div>
-        <span className="hero__scrim" aria-hidden="true" />
+        <span className="hero__scrim" data-hero="scrim" aria-hidden="true" />
       </div>
 
       <div className="hero__inner">
         <div className="hero__copy">
-          <h1 className="hero__title">{hero.title}</h1>
-          <div className="hero__body">
+          <h1 className="hero__title" data-hero="line">
+            {hero.title}
+          </h1>
+          <div className="hero__body" data-hero="line">
             {hero.body.map((line) => (
               <p key={line}>{line}</p>
             ))}
           </div>
-          <a className="btn-raahi btn-raahi--sm hero__cta" href="#journey">
-            {hero.cta}
-          </a>
+          <div data-hero="line">
+            <a className="btn-raahi btn-raahi--sm" href="#journey">
+              {hero.cta}
+            </a>
+          </div>
         </div>
       </div>
     </section>

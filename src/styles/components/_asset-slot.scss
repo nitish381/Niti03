@@ -1,0 +1,17 @@
+@use '../abstracts' as *;
+
+/// Empty slot standing in for an un-exported Figma asset. Deliberately neutral:
+/// it reserves the exact box without drawing anything that could be mistaken
+/// for the real artwork.
+.asset-slot {
+  display: block;
+  width: 100%;
+  background-color: color-mix(in srgb, currentcolor 5%, transparent);
+  border-radius: inherit;
+
+  /// Development only — makes an un-exported asset impossible to miss.
+  &--debug {
+    outline: 1px dashed color-mix(in srgb, currentcolor 18%, transparent);
+    outline-offset: -1px;
+  }
+}

@@ -1,30 +1,48 @@
 import { AssetImage } from '@/components/AssetImage';
-import { Reveal } from '@/components/Reveal';
-import { useParallax } from '@/hooks/useParallax';
+import { gsap } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
+import { parallax, reveal, scrollWipe } from '@/lib/scroll/scenes';
 import { iceberg } from '@/content/raahi';
 
 /**
- * The visual thesis: what you see versus what shapes you.
+ * The visual thesis: what you see versus what shapes you — and the page's
+ * strongest scroll moment.
  *
- * `raahi-mental-model-iceberg.png` carries the full diagram — the iceberg, the
- * waterline, the faint grid, and all ten marker rings and labels in their green
- * and red. Those markers are part of the artwork, so none are drawn over it.
+ * `raahi-mental-model-iceberg.png` carries the whole diagram, including all ten
+ * marker rings and labels, so individual markers cannot be animated separately
+ * without cutting up the artwork. Instead the reader *descends* it: a
+ * scroll-driven wipe uncovers the image from the waterline downwards, so the
+ * submerged mass — and the labels sitting on it — are revealed exactly as far
+ * as the reader has scrolled. The surface is there from the start; the depth
+ * has to be earned.
  *
- * The label text is therefore pixels rather than characters, so the same list
- * is repeated for assistive technology in a visually hidden block.
- *
- * The graphic rises gently on scroll — position only, never scaled or cropped.
+ * Underneath that, the graphic drifts upward slightly slower than the copy
+ * beside it, which separates the two planes without anything moving visibly.
  */
 export function Iceberg() {
-  const artRef = useParallax<HTMLDivElement>(0.05, { max: 40 });
+  const ref = useScrollScene<HTMLElement>((root) => {
+    const art = root.querySelector('[data-ice="art"]') as HTMLElement | null;
+    const image = root.querySelector('.iceberg__image');
+    const copy = gsap.utils.toArray<HTMLElement>('[data-ice="copy"] > *', root);
+
+    reveal(root, copy, { y: 34, stagger: 0.1 });
+
+    if (art) parallax(art, -70, root);
+
+    // The descent. Starts just after the section enters and completes while it
+    // is still comfortably on screen, so the reveal is never racing the reader.
+    if (image) {
+      scrollWipe(image, root, { start: 'top 72%', end: 'bottom 78%', from: 58 });
+    }
+  });
 
   const above = iceberg.markers.filter((m) => m.depth === 'above');
   const below = iceberg.markers.filter((m) => m.depth === 'below');
 
   return (
-    <section className="iceberg">
+    <section className="iceberg" ref={ref}>
       <div className="iceberg__inner">
-        <Reveal className="iceberg__copy">
+        <div className="iceberg__copy" data-ice="copy">
           <p className="iceberg__eyebrow">{iceberg.eyebrow}</p>
           <h2 className="iceberg__title">{iceberg.title}</h2>
           <div className="iceberg__body">
@@ -35,10 +53,10 @@ export function Iceberg() {
           <a className="btn-raahi btn-raahi--lg" href="#the-app">
             {iceberg.cta}
           </a>
-        </Reveal>
+        </div>
 
-        <Reveal variant="scale" className="iceberg__figure">
-          <div className="iceberg__art" ref={artRef}>
+        <div className="iceberg__figure">
+          <div className="iceberg__art" data-ice="art">
             <AssetImage
               id="raahi-mental-model-iceberg"
               alt="An iceberg with a small peak above the waterline and its far greater mass below it"
@@ -65,7 +83,7 @@ export function Iceberg() {
               ))}
             </ul>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

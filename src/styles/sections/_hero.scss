@@ -42,12 +42,6 @@
     inset-block-start: -6%;
     inset-inline: 0;
     height: 112%;
-    opacity: 0;
-    transition: opacity 1200ms ease;
-
-    .hero--entered & {
-      opacity: 1;
-    }
 
     @include down('md') {
       position: static;
@@ -125,16 +119,6 @@
     line-height: 1.05;
     color: var(--c-static-white);
     text-shadow: 0 2px 40px rgb(0 0 0 / 45%);
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 900ms $ease-out-expo 300ms,
-      transform 900ms $ease-out-expo 300ms;
-
-    .hero--entered & {
-      opacity: 1;
-      transform: none;
-    }
   }
 
   &__body {
@@ -146,41 +130,5 @@
     line-height: 1.5;
     color: var(--c-static-stone);
     text-shadow: 0 1px 20px rgb(0 0 0 / 55%);
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 900ms $ease-out-expo 500ms,
-      transform 900ms $ease-out-expo 500ms;
-
-    .hero--entered & {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  &__cta {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 900ms $ease-out-expo 700ms,
-      transform 900ms $ease-out-expo 700ms,
-      filter $dur-base ease,
-      box-shadow $dur-base ease;
-
-    .hero--entered & {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @include reduced-motion {
-    .hero__art,
-    .hero__title,
-    .hero__body,
-    .hero__cta {
-      transition-duration: 1ms;
-      transition-delay: 0ms;
-      transform: none;
-    }
   }
 }

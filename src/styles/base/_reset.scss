@@ -12,8 +12,14 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
   scroll-padding-top: var(--header-height);
+
+  /// Lenis drives scrolling and would fight native smooth behaviour. The class
+  /// is set only when Lenis is switched off (reduced motion, or touch), where
+  /// native smooth scrolling is what we want for anchors.
+  &.no-lenis {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

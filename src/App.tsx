@@ -1,3 +1,4 @@
+import { useSmoothScroll } from '@/lib/scroll/useSmoothScroll';
 import { MainLayout } from '@/layouts/MainLayout';
 import { Hero } from '@/sections/Hero';
 import { StatementBand } from '@/sections/StatementBand';
@@ -16,6 +17,8 @@ import { Newsletter } from '@/sections/Newsletter';
 
 /** Section order follows the Figma frame top to bottom (node 105:1062). */
 export default function App() {
+  useSmoothScroll();
+
   return (
     <MainLayout>
       <Hero />

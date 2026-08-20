@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Reveal } from '@/components/Reveal';
+import { gsap } from '@/lib/scroll/gsap';
+import { useScrollScene } from '@/lib/scroll/useScrollScene';
+import { reveal } from '@/lib/scroll/scenes';
 import { faq } from '@/content/raahi';
 
 /**
@@ -16,13 +18,25 @@ import { faq } from '@/content/raahi';
 export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  /** Rows drop in one after another, close together — a list assembling, not
+   *  five separate animations. */
+  const ref = useScrollScene<HTMLElement>((root) => {
+    reveal(root, gsap.utils.toArray('[data-faq="head"] > *', root), { y: 26 });
+    reveal(root, gsap.utils.toArray('.faq__item', root), {
+      y: 24,
+      stagger: 0.07,
+      start: 'top 78%',
+      delay: 0.1,
+    });
+  });
+
   return (
-    <section className="faq">
+    <section className="faq" ref={ref}>
       <div className="faq__inner">
-        <Reveal className="faq__head">
+        <div className="faq__head" data-faq="head">
           <p className="faq__eyebrow">{faq.eyebrow}</p>
           <h2 className="faq__title">{faq.title}</h2>
-        </Reveal>
+        </div>
 
         <ul className="faq__list">
           {faq.entries.map((entry, index) => {
@@ -31,11 +45,9 @@ export function Faq() {
             const buttonId = `faq-button-${index}`;
 
             return (
-              <Reveal
-                as="li"
+              <li
                 key={entry.question}
                 className={['faq__item', isOpen ? 'is-open' : ''].filter(Boolean).join(' ')}
-                delay={index * 60}
               >
                 <h3 className="faq__heading">
                   <button
@@ -67,7 +79,7 @@ export function Faq() {
                     {entry.answer ? <p className="faq__answer">{entry.answer}</p> : null}
                   </div>
                 </div>
-              </Reveal>
+              </li>
             );
           })}
         </ul>
