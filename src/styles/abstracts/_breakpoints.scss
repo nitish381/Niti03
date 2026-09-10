@@ -1,0 +1,36 @@
+// Editorial breakpoints — kept distinct from Bootstrap's own grid breakpoints,
+// which stay at their library defaults where the grid (Container/Row/Col) is used.
+$bp-mobile: 640px;
+$bp-tablet: 1024px;
+$bp-desktop: 1440px;
+$bp-large: 1920px;
+
+@mixin mobile-down {
+  @media (max-width: $bp-mobile) {
+    @content;
+  }
+}
+
+@mixin tablet-down {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $bp-desktop) {
+    @content;
+  }
+}
+
+@mixin large-up {
+  @media (min-width: $bp-large) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

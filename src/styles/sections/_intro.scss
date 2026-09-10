@@ -1,0 +1,23 @@
+@use '../abstracts' as *;
+
+.intro__heading {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+}
+
+.intro__body {
+  display: flex;
+  flex-direction: column;
+  gap: space(6);
+}
+
+.intro__description {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  max-width: 46ch;
+  color: var(--ink-soft);
+}
+
+.intro__statement {
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  max-width: 30ch;
+  text-transform: none;
+}

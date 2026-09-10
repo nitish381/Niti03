@@ -1,0 +1,143 @@
+@use '../abstracts' as *;
+
+.rail {
+  border-top: 1px solid var(--line);
+}
+
+.rail-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr 32px;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  padding-block: clamp(26px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+}
+
+.rail-row__index {
+  font-family: var(--font-display);
+  color: var(--signal-text);
+  font-size: 1.1rem;
+}
+
+.rail-row__title {
+  display: flex;
+  flex-direction: column;
+  gap: space(2);
+}
+
+.rail-row__name {
+  font-size: clamp(1.6rem, 3.4vw, 2.8rem);
+  transition: color 0.25s var(--ease);
+}
+
+.rail-row:hover .rail-row__name,
+.rail-row:focus-visible .rail-row__name {
+  color: var(--signal);
+}
+
+.rail-row__subtitle {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.rail-row__tags {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  justify-self: end;
+  text-align: right;
+  max-width: 32ch;
+}
+
+.rail-row__arrow {
+  justify-self: end;
+  color: var(--ink-soft);
+  font-size: 1.2rem;
+  transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.rail-row:hover .rail-row__arrow,
+.rail-row:focus-visible .rail-row__arrow {
+  color: var(--signal);
+  transform: translateX(6px);
+}
+
+.rail-row__preview {
+  position: absolute;
+  top: 50%;
+  right: var(--gutter);
+  width: min(320px, 30vw);
+  aspect-ratio: 4 / 3;
+  transform: translateY(-50%) scale(0.94);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+  background: var(--surface);
+  box-shadow: 0 24px 48px rgba(20, 20, 20, 0.18);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.rail-row:hover .rail-row__preview,
+.rail-row:focus-visible .rail-row__preview,
+.rail-row:focus-within .rail-row__preview {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.rail-row__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@include reduced-motion {
+  .rail-row__preview,
+  .rail-row__arrow,
+  .rail-row__name {
+    transition: none;
+  }
+}
+
+@include tablet-down {
+  .rail-row {
+    grid-template-columns: 40px 1fr 24px;
+    grid-template-areas:
+      'index name arrow'
+      'preview preview preview'
+      'tags tags tags';
+    row-gap: space(4);
+  }
+
+  .rail-row__index {
+    grid-area: index;
+  }
+
+  .rail-row__title {
+    grid-area: name;
+  }
+
+  .rail-row__arrow {
+    grid-area: arrow;
+  }
+
+  .rail-row__tags {
+    grid-area: tags;
+    justify-self: start;
+    text-align: left;
+  }
+
+  .rail-row__preview {
+    grid-area: preview;
+    position: static;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    box-shadow: none;
+  }
+}

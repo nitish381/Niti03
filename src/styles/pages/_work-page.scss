@@ -1,0 +1,16 @@
+.work-page__heading {
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  max-width: 16ch;
+  padding-top: clamp(48px, 8vh, 96px);
+}
+
+.work-page__intro {
+  color: var(--ink-soft);
+  max-width: 50ch;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  margin-top: 20px;
+}
+
+.work-page__rail {
+  margin-top: clamp(40px, 6vw, 72px);
+}

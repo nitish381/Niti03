@@ -11,8 +11,15 @@ import { Philosophy } from '@/sections/Philosophy';
 import { Industries } from '@/sections/Industries';
 import { About } from '@/sections/About';
 import { FinalCta } from '@/sections/FinalCta';
+import { useDocumentHead } from '@/hooks/useDocumentHead';
 
 export function Landing() {
+  useDocumentHead({
+    title: 'Nitish Kumar — Senior UI/UX & Product Designer',
+    description:
+      'I design digital products across Web3, FinTech, HealthTech, SaaS, and emerging technology, turning complex requirements and workflows into clear, intuitive experiences.',
+  });
+
   return (
     <>
       <Hero />

@@ -1,0 +1,33 @@
+// Single global SCSS entry point. Nothing else in the app imports SCSS —
+// components only ever add classNames that these partials define.
+@use 'vendor/bootstrap';
+
+@use 'base/reset';
+@use 'base/tokens';
+@use 'base/base';
+
+@use 'components/reveal';
+@use 'components/route-transition';
+@use 'components/header';
+@use 'components/footer';
+@use 'components/monogram';
+@use 'components/theme-toggle';
+@use 'components/marquee';
+@use 'components/rail';
+
+@use 'sections/hero';
+@use 'sections/intro';
+@use 'sections/teaser';
+@use 'sections/expertise';
+@use 'sections/work-list';
+@use 'sections/experience';
+@use 'sections/ai-design';
+@use 'sections/process';
+@use 'sections/philosophy';
+@use 'sections/industries';
+@use 'sections/about';
+@use 'sections/final-cta';
+
+@use 'pages/work-page';
+@use 'pages/project-detail';
+@use 'pages/contact-page';

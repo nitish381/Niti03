@@ -9,7 +9,7 @@
 export const heroPortrait =
   'https://pikaso.cdnpk.net/private/production/5406881085/render.jpg?token=exp=1789257600~hmac=1e2e987021c24cbf649823bd3b0292e54965275069a4668cf08ee21264488d8e';
 
-export const projectCovers: Record<string, string> = {
+const projectCovers: Record<string, string> = {
   healthaera:
     'https://pikaso.cdnpk.net/private/production/5406883430/render.jpg?token=exp=1789257600~hmac=dd72617a7fc18a30c332d14b6dd3fbf4d0ea892ce72be91c9bd6f46cac7a5ead',
   blocknexus:
@@ -18,6 +18,16 @@ export const projectCovers: Record<string, string> = {
   'gem-pocket':
     'https://pikaso.cdnpk.net/private/production/5406884974/render.jpg?token=exp=1789257600~hmac=b9d125314a39c871f9365f77c66418c9d481a9cc1666cd093c6588941455a495',
 };
+
+/**
+ * Single resolver for a project's thumbnail/cover image. Components look
+ * projects up by slug through this function rather than indexing the map
+ * directly, so the media source can move (e.g. to a bundled local file)
+ * without touching call sites.
+ */
+export function getProjectThumbnail(slug: string): string {
+  return projectCovers[slug] ?? '';
+}
 
 export const teaserPoster =
   'https://pikaso.cdnpk.net/private/production/5406886103/render.jpg?token=exp=1789257600~hmac=a0adddabbc176829a33155669e16505a89ad5df6455e9a30e8163a4aeec69ebe';

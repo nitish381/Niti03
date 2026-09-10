@@ -12,6 +12,7 @@ export function TeaserVideo() {
         <video
           src={teaserVideo}
           poster={teaserPoster}
+          preload="metadata"
           autoPlay
           muted
           loop

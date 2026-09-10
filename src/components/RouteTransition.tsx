@@ -1,38 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
-// Subtle cross-fade + rise between routes. No loading spinner, no long hold.
+// Subtle cross-fade + rise on every route change. Keying on the pathname
+// remounts the subtree, which restarts the CSS entry animation for free —
+// no effect/setState choreography needed. prefers-reduced-motion disables
+// the animation in CSS (components/_route-transition.scss).
 export function RouteTransition() {
   const location = useLocation();
   const outlet = useOutlet();
-  const reducedMotion = useReducedMotion();
-  const [displayed, setDisplayed] = useState(outlet);
-  const [phase, setPhase] = useState<'enter' | 'idle'>('idle');
-  const key = useRef(location.pathname);
-
-  useEffect(() => {
-    if (key.current === location.pathname) return;
-    key.current = location.pathname;
-
-    if (reducedMotion) {
-      setDisplayed(outlet);
-      return;
-    }
-
-    setPhase('enter');
-    setDisplayed(outlet);
-    const frame = requestAnimationFrame(() => setPhase('idle'));
-    return () => cancelAnimationFrame(frame);
-  }, [location.pathname, outlet, reducedMotion]);
-
-  useEffect(() => {
-    if (key.current === location.pathname) setDisplayed(outlet);
-  }, [outlet, location.pathname]);
 
   return (
-    <div className={`route-transition ${phase === 'enter' ? 'route-transition--enter' : ''}`}>
-      {displayed}
+    <div key={location.pathname} className="route-transition">
+      {outlet}
     </div>
   );
 }

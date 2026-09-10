@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/Reveal';
-import type { Project } from '@/content/site';
-import { projectCovers } from '@/content/assets';
+import { projectRoute, type Project } from '@/content/site';
+import { getProjectThumbnail } from '@/content/assets';
 
 interface ProjectRailProps {
   projects: Project[];
@@ -12,7 +12,7 @@ export function ProjectRail({ projects }: ProjectRailProps) {
     <ul className="rail">
       {projects.map((project, i) => (
         <Reveal as="li" key={project.slug} delay={i * 60}>
-          <Link to={`/work/${project.slug}`} className="rail-row">
+          <Link to={projectRoute(project.slug)} className="rail-row">
             <span className="rail-row__index">{project.index}</span>
             <span className="rail-row__title">
               <span className="rail-row__name display">{project.name}</span>
@@ -23,7 +23,7 @@ export function ProjectRail({ projects }: ProjectRailProps) {
               →
             </span>
             <span className="rail-row__preview">
-              <img src={projectCovers[project.slug]} alt="" loading="lazy" />
+              <img src={getProjectThumbnail(project.slug)} alt="" loading="lazy" />
             </span>
           </Link>
         </Reveal>

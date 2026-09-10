@@ -13,6 +13,17 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: 'modern-compiler',
+        // Bootstrap's own SCSS still uses legacy @import internally; this
+        // silences only that noise, not anything in our own partials, which
+        // are @use/@forward-only.
+        silenceDeprecations: [
+          'import',
+          'global-builtin',
+          'color-functions',
+          'if-function',
+          'slash-div',
+          'abs-percent',
+        ],
       },
     },
   },

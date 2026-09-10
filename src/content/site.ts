@@ -48,14 +48,24 @@ export const expertise = [
   },
 ];
 
+/**
+ * A single case-study entry. `slug` is the join key used to resolve both
+ * the route (`projectRoute`) and the thumbnail (`getProjectThumbnail` in
+ * content/assets.ts) — media stays centralized there rather than embedded
+ * on this record, so it's a one-line swap when final assets arrive.
+ */
 export interface Project {
   index: string;
   slug: string;
   name: string;
   subtitle: string;
+  /** Industry / discipline tags, approved verbatim per project. */
   tags: string;
   description: string;
-  cover: string;
+}
+
+export function projectRoute(slug: string): string {
+  return `/work/${slug}`;
 }
 
 export const projects: Project[] = [
@@ -67,7 +77,6 @@ export const projects: Project[] = [
     tags: 'HealthTech · Product Design · UX · AI',
     description:
       'Connected healthcare experience across personal health information, planning, family care, community and AI-assisted support.',
-    cover: 'project-healthaera.jpg',
   },
   {
     index: '02',
@@ -77,7 +86,6 @@ export const projects: Project[] = [
     tags: 'FinTech · Web3 · Product Design',
     description:
       'Wallets, crypto balances, fiat on-ramp, card spending and transaction journeys.',
-    cover: 'project-blocknexus.jpg',
   },
   {
     index: '03',
@@ -87,7 +95,6 @@ export const projects: Project[] = [
     tags: 'Web3 · RWA · Product Strategy · UX',
     description:
       'Clearer experiences for asset-backed products, investment journeys and tokenization workflows.',
-    cover: 'project-rwa.jpg',
   },
   {
     index: '04',
@@ -97,7 +104,6 @@ export const projects: Project[] = [
     tags: 'Web3 · Blockchain · Wallet UX',
     description:
       'Non-custodial wallet experience for managing multiple blockchain addresses through a single identity.',
-    cover: 'project-gempocket.jpg',
   },
 ];
 

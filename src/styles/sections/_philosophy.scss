@@ -1,0 +1,24 @@
+// A deliberate, fixed full-bleed color break — always dark ink text on
+// yellow, in both site themes. This is an editorial device, not page chrome.
+.philosophy-break {
+  background: var(--yellow);
+  color: var(--fixed-dark);
+}
+
+.philosophy {
+  padding-block: var(--section-space);
+  text-align: center;
+}
+
+.philosophy__headline {
+  font-size: clamp(2.2rem, 5.6vw, 4.2rem);
+  max-width: 20ch;
+  margin: 0 auto;
+}
+
+.philosophy__statement {
+  color: rgba(20, 20, 20, 0.7);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  max-width: 40ch;
+  margin: 24px auto 0;
+}

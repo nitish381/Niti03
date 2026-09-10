@@ -1,0 +1,23 @@
+// Only the grid system, not the full Bootstrap bundle — no reboot, buttons,
+// cards, or component skins. That keeps "excessive cards / rounded corners /
+// default Bootstrap look" from ever entering an editorial, bespoke design,
+// while still giving Container/Row/Col a real, tested responsive grid engine
+// to run on (used by Hero, Intro, About and the project-detail body split).
+// Deliberately kept at Bootstrap's own default breakpoints rather than
+// remapped to our editorial 640/1024 breakpoints — react-bootstrap's
+// Row/Col props (xs/md/lg/xl) stay standard and predictable; every other,
+// more bespoke component (rail, marquee, expertise grid) uses our own
+// breakpoint mixins instead.
+//
+// Bootstrap 5's own SCSS partials still lean on the legacy @import
+// global-namespace model internally (e.g. _variables.scss calls a private
+// mixin defined in mixins/_breakpoints.scss without @use-ing it) — they are
+// not yet safe to load piecemeal via @use. @import here is a deliberate,
+// contained exception for this one third-party vendor file; every partial
+// we author ourselves stays @use/@forward-only.
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
