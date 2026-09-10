@@ -4,6 +4,8 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SkipLink } from '@/components/SkipLink';
 import { RouteTransition } from '@/components/RouteTransition';
+import { Cursor } from '@/components/Cursor';
+import { BackToTop } from '@/components/BackToTop';
 
 export function MainLayout() {
   const { pathname } = useLocation();
@@ -15,11 +17,13 @@ export function MainLayout() {
   return (
     <>
       <SkipLink />
+      <Cursor />
       <Header />
       <main id="main-content">
         <RouteTransition />
       </main>
       <Footer />
+      <BackToTop />
     </>
   );
 }

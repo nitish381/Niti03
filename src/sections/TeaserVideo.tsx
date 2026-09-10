@@ -1,15 +1,18 @@
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useSectionParallax } from '@/hooks/useSectionParallax';
 import { teaserPoster, teaserVideo } from '@/content/assets';
 
 export function TeaserVideo() {
   const reducedMotion = useReducedMotion();
+  const parallaxRef = useSectionParallax<HTMLElement>();
 
   return (
-    <section className="teaser">
+    <section className="teaser" ref={parallaxRef}>
       {reducedMotion ? (
         <img className="teaser__poster" src={teaserPoster} alt="" />
       ) : (
         <video
+          className="teaser__video"
           src={teaserVideo}
           poster={teaserPoster}
           preload="metadata"

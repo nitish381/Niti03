@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+
+.stagger-text__word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.stagger-text.is-visible .stagger-text__word {
+  opacity: 1;
+  transform: none;
+}
+
+@include reduced-motion {
+  .stagger-text__word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

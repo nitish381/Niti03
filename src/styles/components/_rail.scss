@@ -92,10 +92,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  // Editorial wipe reveal (clip-path, per the layout hard rule — never
+  // width/height) rather than a plain fade: the image uncovers left-to-right
+  // as the row activates, on top of the box's own fade + scale.
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.55s var(--ease), transform 0.6s var(--ease);
+}
+
+.rail-row:hover .rail-row__preview img,
+.rail-row:focus-visible .rail-row__preview img,
+.rail-row:focus-within .rail-row__preview img {
+  clip-path: inset(0 0 0 0%);
+  transform: scale(1.02);
 }
 
 @include reduced-motion {
   .rail-row__preview,
+  .rail-row__preview img,
   .rail-row__arrow,
   .rail-row__name {
     transition: none;
@@ -139,5 +152,11 @@
     transform: none;
     pointer-events: auto;
     box-shadow: none;
+  }
+
+  // No hover trigger on touch — the image must be visible at rest, not
+  // waiting for a wipe that will never fire.
+  .rail-row__preview img {
+    clip-path: inset(0 0 0 0%);
   }
 }

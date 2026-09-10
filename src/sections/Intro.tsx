@@ -1,5 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
 import { Reveal } from '@/components/Reveal';
+import { StaggerText } from '@/components/StaggerText';
 import { intro } from '@/content/site';
 
 export function Intro() {
@@ -7,9 +8,7 @@ export function Intro() {
     <section className="section container">
       <Row className="g-4">
         <Col xs={12} md={8} lg={4}>
-          <Reveal as="h2" className="intro__heading display">
-            {intro.heading}
-          </Reveal>
+          <StaggerText as="h2" className="intro__heading display" text={intro.heading} />
         </Col>
         <Col xs={12} md={8}>
           <div className="intro__body">

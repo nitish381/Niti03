@@ -7,6 +7,9 @@
 @use 'base/base';
 
 @use 'components/reveal';
+@use 'components/stagger-text';
+@use 'components/cursor';
+@use 'components/back-to-top';
 @use 'components/route-transition';
 @use 'components/header';
 @use 'components/footer';
