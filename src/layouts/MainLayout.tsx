@@ -1,19 +1,21 @@
-import type { ReactNode } from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
+export function MainLayout() {
+  const { pathname } = useLocation();
 
-export function MainLayout({ children }: MainLayoutProps) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [pathname]);
+
   return (
     <>
-      <a className="u-skip-link" href="#main">
-        Skip to content
-      </a>
       <Header />
-      <main id="main">{children}</main>
+      <main>
+        <Outlet />
+      </main>
       <Footer />
     </>
   );

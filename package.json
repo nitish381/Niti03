@@ -1,9 +1,9 @@
 {
-  "name": "raahi-landing",
+  "name": "nitish-kumar-portfolio",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "RAAHI landing page — React + Vite + TypeScript + SCSS",
+  "description": "Nitish Kumar — Senior UI/UX & Product Designer portfolio",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
@@ -14,12 +14,9 @@
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
-    "gsap": "^3.15.0",
-    "lenis": "^1.3.26",
     "react": "^19.1.0",
-    "react-bootstrap": "^2.10.7",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",

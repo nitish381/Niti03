@@ -1,11 +1,7 @@
-# RAAHI — Landing Page
+# Nitish Kumar — Portfolio
 
-Production frontend for the RAAHI landing page, built from the Figma source of
-truth (**Final Pages › LandingPage**, node `105:1062`).
-
-React + Vite + TypeScript + SCSS. No Tailwind, no CSS Modules.
-
----
+Personal portfolio for Nitish Kumar, Senior UI/UX & Product Designer.
+React + Vite + TypeScript, plain CSS with a token-driven design system.
 
 ## Requirements
 
@@ -25,119 +21,53 @@ npm install
 | `npm run preview` | Serve the production build locally |
 | `npm run typecheck` | Type-check only |
 
----
-
-## Architecture
+## Structure
 
 ```
 src/
-├── assets/            Figma exports (see docs/asset-manifest.md)
-│   ├── images/        hero · sections · founder · seminar · books · backgrounds
-│   ├── graphics/      iceberg · journey · decorative
-│   ├── icons/
-│   └── logo/
-├── components/        Reusable primitives
-├── layouts/           Header · Footer · MainLayout
-├── sections/          One component per landing-page section
-├── content/           raahi.ts — all copy, transcribed from Figma
-├── hooks/             useTheme · useScrolled
-├── styles/            SCSS (see below)
-├── App.tsx
-└── main.tsx
+├── content/        site.ts (approved copy) · assets.ts (placeholder media URLs)
+├── components/      Header · Footer · Reveal (scroll-in) · UntangleLine (hero signature move)
+├── sections/        one component per landing-page section
+├── pages/           Landing · Work · ProjectDetail · Contact · NotFound
+├── layouts/          MainLayout (Header/Footer shell + scroll-to-top on route change)
+├── hooks/            useReducedMotion · useReveal
+├── styles/global.css design tokens + all styles (single entry point)
+└── App.tsx            routes
 ```
 
-### Styling
+No conventional nav bar, per the brief — the header carries only the name and a single "Say hello" link.
 
-One stylesheet enters the app: `src/styles/global.scss`. Components never
-import SCSS of their own.
+## Content
 
-```
-styles/
-├── global.scss        the single entry point — imports everything below
-├── abstracts/         zero-output: functions, variables, breakpoints, mixins
-├── base/              tokens, reset, element defaults, utilities
-├── vendor/            Bootstrap bundle + CSS-variable re-theme
-├── layout/            container, section shell, header, footer
-├── components/        button, section-heading, logo, app-badge, node-marker
-└── sections/          one partial per section
-```
+All landing-page copy lives verbatim in `src/content/site.ts`, transcribed from the
+approved PRD. Do not paraphrase or invent content there — treat it as source of truth.
 
-- Modern Sass module system throughout — `@use` / `@forward`, no `@import`.
-- Partials reach shared code with `@use '../abstracts' as *;`. That is a
-  SCSS-to-SCSS reference required by the module system, not a per-component
-  stylesheet import.
-- **BEM** naming: `.block__element--modifier`.
+## Placeholder media
 
-### Design tokens
+`src/content/assets.ts` currently points at **temporary AI-generated placeholder
+images and a placeholder teaser video**, hosted on Magnific's CDN. They are
+referenced as remote URLs rather than bundled into `src/assets/` because this
+build environment's network policy blocked direct downloads to disk — the
+build tool itself could reach the generation API, but not pull the resulting
+files onto disk here.
 
-`styles/base/_tokens.scss` holds two tiers:
+This works for real visitors (the restriction only applied to this sandbox),
+but it isn't a permanent setup:
 
-- `--c-static-*` — raw values read from Figma. Never change.
-- `--c-*` — semantic roles, mapped onto those raw values.
+- The signed URLs carry an expiry token (good for roughly a year from
+  generation).
+- Hot-linking a third-party generation host isn't appropriate for a shipped
+  site.
 
-**Light only**, exactly as the Figma file is drawn: page `#f4ece2`, ink
-`#0a0909`, terracotta `#b5502c`, CTA `#ffac66`.
+**Before launch:** download each URL in `src/content/assets.ts`, save it under
+`src/assets/images/` (or `src/assets/video/`), and swap the import. Replace the
+hero portrait with the real photo, and the four project covers / teaser clip
+with real or final creative whenever they're ready — this is exactly the swap
+the PRD anticipated ("easily replaceable later").
 
-There is no dark theme and no theme switch. The dark passages in the page — the
-hero, the CTA band, the philosophy art card — are dark *by design* in Figma, not
-by theme; they opt in through the `.is-inverse` class.
+## Signature move
 
-### Responsive
-
-Mobile-first. Breakpoints: `sm` 576 · `md` 768 · `lg` 1024 · `xl` 1440 ·
-`xxl` 1600.
-
-Type scales continuously via the `fluid()` function rather than stepping at
-breakpoints. Container width and gutter step per breakpoint, ending at the
-Figma 1600 / 160 grid.
-
----
-
-### Motion
-
-- `lib/scrollEngine.ts` — one passive scroll listener and one rAF loop drive
-  every parallax element. Offsets are cached on register and resize, never read
-  per frame, and only near-viewport elements are written to.
-- `useReveal` — IntersectionObserver, no scroll listener.
-- Everything is gated on `prefers-reduced-motion`: reveals still reveal, they
-  just arrive without travel, and parallax never registers at all.
-
-Parallax is used in four places only (hero photo, hero fog ×2, library
-mountains, journey panorama). Text, cards and the iceberg are never parallaxed.
-
----
-
-## Asset status
-
-The 18 supplied Raahi assets are integrated, under their original filenames.
-
-`AssetImage` looks each one up in `src/assets/registry.ts`, which globs
-`src/assets/**` at build time and indexes by filename stem — so dropping a file
-into the right folder is all it takes to mount it.
-
-Several assets are finished compositions: the hero carries its own fog, glow,
-path and waypoint labels; the iceberg carries all ten markers; the manifesto
-card, the seminar mosaic and the app-showcase band are each a single image. The
-markup that used to draw those pieces has been removed so nothing is drawn
-twice.
-
-**Three slots remain empty** — book covers 04 and 05, and the founder avatar.
-Nothing is substituted for them. Full mapping, the composite breakdown, the
-CSS-only presentation adjustments and everything still outstanding:
-**`docs/asset-manifest.md`**.
-
-## Verification
-
-Driven in headless Chromium at 1920 / 1440 / 1280 / 1024 / 768 / 480 / 390 / 375:
-
-- No horizontal overflow at any width (`scrollWidth === clientWidth` throughout)
-- Zero console errors at any width
-- One `<h1>`, 14 `<h2>`, every `<img>` carries `alt`
-- 17 interaction checks pass — FAQ single-open + toggle, carousel arrows, theme
-  toggle with `data-bs-theme` sync, anchor scrolling, mobile drawer open/close,
-  and the three reduced-motion guarantees
-
-## Documentation
-
-- `docs/phase-01-figma-analysis.md` — full design analysis and asset audit
-- `docs/asset-manifest.md` — asset inventory keyed by Figma node ID
+The hero's thin line (`UntangleLine.tsx`) starts tangled and straightens as
+the visitor scrolls past the first screen — a small literal echo of "I design
+complex products to feel simple." It fully respects
+`prefers-reduced-motion` (renders straight immediately, no animation).

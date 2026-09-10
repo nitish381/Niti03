@@ -13,17 +13,6 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: 'modern-compiler',
-        // Bootstrap 5.3 still ships `@import`-based partials. Our own SCSS is
-        // fully `@use`/`@forward`; these silence the noise coming from inside
-        // node_modules/bootstrap only.
-        silenceDeprecations: [
-          'import',
-          'global-builtin',
-          'color-functions',
-          'if-function',
-          'slash-div',
-          'abs-percent',
-        ],
       },
     },
   },
@@ -32,8 +21,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          bootstrap: ['react-bootstrap'],
+          vendor: ['react', 'react-dom', 'react-router-dom'],
         },
       },
     },
