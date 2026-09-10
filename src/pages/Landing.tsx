@@ -1,4 +1,5 @@
 import { Hero } from '@/sections/Hero';
+import { Marquee } from '@/components/Marquee';
 import { Intro } from '@/sections/Intro';
 import { TeaserVideo } from '@/sections/TeaserVideo';
 import { Expertise } from '@/sections/Expertise';
@@ -15,6 +16,7 @@ export function Landing() {
   return (
     <>
       <Hero />
+      <Marquee />
       <Intro />
       <TeaserVideo />
       <Expertise />

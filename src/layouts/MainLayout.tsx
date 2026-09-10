@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SkipLink } from '@/components/SkipLink';
+import { RouteTransition } from '@/components/RouteTransition';
 
 export function MainLayout() {
   const { pathname } = useLocation();
@@ -12,9 +14,10 @@ export function MainLayout() {
 
   return (
     <>
+      <SkipLink />
       <Header />
-      <main>
-        <Outlet />
+      <main id="main-content">
+        <RouteTransition />
       </main>
       <Footer />
     </>

@@ -17,7 +17,7 @@ export const hero = {
 export const intro = {
   heading: 'DESIGNING BEYOND THE INTERFACE.',
   description:
-    'I work across the product journey — from requirements, user flows and information architecture to UI, design systems, prototyping and developer collaboration.',
+    'I work across the product journey, from requirements, user flows and information architecture to UI, design systems, prototyping and developer collaboration.',
   statement: 'Understand the complexity. Structure the experience. Make it easier to use.',
 };
 
@@ -101,6 +101,16 @@ export const projects: Project[] = [
   },
 ];
 
+export const experienceYears = '8.5+ YEARS';
+
+export const experienceProgression = [
+  'Graphic Design',
+  'UI/UX',
+  'Product Design',
+  'Complex Products',
+  'AI-Assisted Design',
+];
+
 export const experience = [
   {
     period: '2022–Present',
@@ -136,7 +146,7 @@ export const aiDesign = {
   heading: 'DESIGN × AI',
   statement: 'Faster exploration. Smarter workflows. Human-led decisions.',
   description:
-    'I use AI-assisted workflows to accelerate exploration, synthesis, documentation, prototyping and visual experimentation — while keeping product thinking, UX judgment and final design decisions human-led.',
+    'I use AI-assisted workflows to accelerate exploration, synthesis, documentation, prototyping and visual experimentation, while keeping product thinking, UX judgment and final design decisions human-led.',
   workflow: [
     { stage: 'THINK', detail: 'Requirements · Research · Problem Exploration' },
     { stage: 'EXPLORE', detail: 'Concepts · UX Directions · UI Exploration' },
@@ -173,7 +183,7 @@ export const about = {
 export const finalCta = {
   headline: 'HAVE A COMPLEX PRODUCT WORTH SOLVING?',
   subheadline: "LET'S MAKE IT SIMPLE.",
-  action: 'Start a conversation ↗',
+  action: 'Start a conversation',
   links: {
     linkedin: 'https://www.linkedin.com/in/nitish-kumar',
     email: 'mailto:hello@nitishkumar.design',

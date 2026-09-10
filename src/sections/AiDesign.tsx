@@ -3,23 +3,27 @@ import { aiDesign } from '@/content/site';
 
 export function AiDesign() {
   return (
-    <section className="section container">
-      <Reveal as="div" className="ai-design">
-        <div className="ai-design__inner">
-          <h2 className="ai-design__heading display">{aiDesign.heading}</h2>
-          <p className="ai-design__statement">{aiDesign.statement}</p>
-          <p className="ai-design__description">{aiDesign.description}</p>
-          <div className="ai-design__workflow">
-            {aiDesign.workflow.map((stage) => (
-              <div key={stage.stage}>
-                <p className="ai-design__stage display">{stage.stage}</p>
-                <p className="ai-design__stage-detail">{stage.detail}</p>
-              </div>
-            ))}
-          </div>
-          <p className="ai-design__tools">{aiDesign.tools}</p>
+    <section className="ai-design">
+      <div className="container ai-design__inner">
+        <Reveal as="h2" className="ai-design__heading display">
+          {aiDesign.heading}
+        </Reveal>
+        <Reveal as="p" className="ai-design__statement" delay={60}>
+          {aiDesign.statement}
+        </Reveal>
+        <Reveal as="p" className="ai-design__description" delay={100}>
+          {aiDesign.description}
+        </Reveal>
+        <div className="ai-design__workflow">
+          {aiDesign.workflow.map((stage, i) => (
+            <Reveal as="div" key={stage.stage} delay={i * 60}>
+              <p className="ai-design__stage display">{stage.stage}</p>
+              <p className="ai-design__stage-detail">{stage.detail}</p>
+            </Reveal>
+          ))}
         </div>
-      </Reveal>
+        <p className="ai-design__tools">{aiDesign.tools}</p>
+      </div>
     </section>
   );
 }
