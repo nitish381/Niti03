@@ -1,12 +1,9 @@
 @use '../abstracts' as *;
 
-// A deliberate, fixed "printed insert" block — stays dark-on-light-text in
-// both site themes (see base/_tokens.scss), not something that inverts with
-// the page.
+// A deliberate dark "printed insert" block, not page chrome.
 .ai-design {
-  background: var(--fixed-dark);
-  color: var(--fixed-light);
-  border-block: 1px solid var(--fixed-block-edge);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .ai-design__inner {

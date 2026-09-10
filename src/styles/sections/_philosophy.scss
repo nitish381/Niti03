@@ -1,8 +1,7 @@
-// A deliberate, fixed full-bleed color break — always dark ink text on
-// yellow, in both site themes. This is an editorial device, not page chrome.
+// A deliberate full-bleed color break — dark ink text on yellow.
 .philosophy-break {
   background: var(--yellow);
-  color: var(--fixed-dark);
+  color: var(--ink);
 }
 
 .philosophy {

@@ -1,14 +1,41 @@
 @use '../abstracts' as *;
 
 .hero {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   padding-top: clamp(96px, 14vh, 160px);
   padding-bottom: clamp(48px, 8vh, 96px);
+  // Clip only the axis the bled background word could overflow horizontally
+  // on; let it bleed past the section's own bottom edge vertically, where
+  // the next section's opaque background naturally cuts it off — the same
+  // "cropped at the fold" look the reference uses.
+  overflow-x: clip;
+  overflow-y: visible; // explicit: pairing overflow-x with a non-"visible" value can otherwise flip this to "auto"
+  --scroll-p: 0; // driven by useScrollParallax; 0 when JS hasn't run yet (first paint, reduced motion)
+}
+
+// --- background layer: a huge, low-contrast bled word behind everything ---
+// The dimensional-layering device: subject, foreground pills and CTA badge
+// all sit above this at rest, and it drifts at its own rate on scroll.
+.hero__bg-word {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(-40px, -4vw, -10px);
+  z-index: 0;
+  margin: 0;
+  font-size: clamp(6rem, 17vw, 13rem);
+  line-height: 0.85;
+  color: var(--surface);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateY(calc(var(--scroll-p) * 60px));
 }
 
 .hero__row {
+  position: relative;
+  z-index: 1;
   width: 100%;
 }
 
@@ -58,11 +85,10 @@
   font-size: clamp(1rem, 1.3vw, 1.15rem);
 }
 
-.hero__capabilities {
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+// --- subject + foreground layers ---
+
+.hero__portrait-wrap {
+  position: relative;
 }
 
 .hero__portrait {
@@ -70,6 +96,7 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--surface);
+  transform: translateY(calc(var(--scroll-p) * -18px));
 }
 
 .hero__portrait img {
@@ -79,11 +106,126 @@
   filter: grayscale(0.55) contrast(1.08);
 }
 
-// `order` has to sit on the Bootstrap Col (the actual flex item inside
-// .row) — the image box itself is a grandchild, not a flex sibling. This
-// reorder/shrink only matters once Bootstrap actually stacks the columns
-// (below its own md breakpoint, 768px) — above that they're already
-// side by side and the portrait should just fill its column normally.
+.hero__pills {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__pill {
+  --float-delay: calc(var(--i) * 0.4s);
+  position: absolute;
+  pointer-events: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 12px 24px rgba(20, 20, 20, 0.08);
+  animation: pill-float 5s ease-in-out infinite;
+  animation-delay: var(--float-delay);
+  transform: translateY(calc(var(--scroll-p) * -34px));
+
+  // scattered around the portrait's edges, five approved capability words
+  &:nth-child(1) {
+    top: 8%;
+    right: -8%;
+  }
+  &:nth-child(2) {
+    top: 32%;
+    right: -14%;
+  }
+  &:nth-child(3) {
+    top: 32%;
+    left: -12%;
+  }
+  &:nth-child(4) {
+    bottom: 16%;
+    right: -6%;
+  }
+  // top-left is the one corner the badge (bottom-left) and the other four
+  // pills (right side + left-mid) leave clear
+  &:nth-child(5) {
+    top: -4%;
+    left: -4%;
+  }
+}
+
+@keyframes pill-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@include reduced-motion {
+  .hero__pill {
+    animation: none;
+  }
+}
+
+// --- CTA layer: rotating circular badge, overlapping the portrait ---
+
+.hero-badge {
+  position: absolute;
+  left: -10%;
+  bottom: -6%;
+  z-index: 2;
+  width: clamp(84px, 9vw, 116px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--signal);
+  color: var(--paper);
+}
+
+.hero-badge__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-badge__ring--spin {
+  animation: badge-spin 11s linear infinite;
+}
+
+@keyframes badge-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-badge__text {
+  font-family: var(--font-text);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  fill: currentColor;
+  text-transform: uppercase;
+}
+
+.hero-badge__arrow {
+  position: relative;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+}
+
+// --- responsive recomposition ---
+
+// Bootstrap stacks Hero's columns to a single one below 768px (its own `md`
+// breakpoint — see the Row/Col usage in Hero.tsx). The scattered absolute
+// pill/badge positions only make sense relative to a portrait sitting
+// *beside* the copy; once the layout stacks, they need to recompose too, at
+// this exact same breakpoint — a mismatched one previously left a broken
+// middle zone (pills scattered against a now much-wider stacked portrait,
+// drifting off the edges of the viewport).
 @media (max-width: 767.98px) {
   .hero__portrait-col {
     order: -1;
@@ -91,6 +233,37 @@
 
   .hero__portrait {
     max-width: 55%;
+  }
+
+  // A dense cluster of absolutely-positioned pills has no room to scatter
+  // once the portrait is no longer beside a wide copy column — recompose as
+  // a static wrapped row below it instead of shrinking the desktop layout
+  // in place.
+  .hero__pills {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .hero__pill {
+    position: static;
+    animation: none;
+    transform: none;
+    font-size: 0.75rem;
+    padding: 8px 15px;
+  }
+
+  // `relative`, not `static` — the ring inside is `position: absolute;
+  // inset: 0`, which needs *some* positioned ancestor to size against, or it
+  // escapes to the next one up (.hero__portrait-wrap) and stretches across
+  // the whole portrait instead of staying inside the badge circle.
+  .hero-badge {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin-top: 16px;
   }
 }
 
@@ -100,6 +273,27 @@
   }
 
   .hero__portrait {
-    max-width: 70%;
+    max-width: 78%;
+  }
+
+  .hero__bg-word {
+    font-size: clamp(3.6rem, 20vw, 6rem);
+  }
+
+  .hero__pill {
+    font-size: 0.68rem;
+    padding: 7px 13px;
+  }
+
+  .hero-badge {
+    width: 72px;
+  }
+}
+
+@include reduced-motion {
+  .hero__bg-word,
+  .hero__portrait,
+  .hero__pill {
+    transform: none;
   }
 }

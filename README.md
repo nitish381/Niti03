@@ -2,8 +2,7 @@
 
 Personal portfolio for Nitish Kumar, Senior UI/UX & Product Designer.
 React + Vite + TypeScript, SCSS (BEM, `@use`/`@forward`), React-Bootstrap's
-grid system for the editorial column layout, CSS custom properties for
-light/dark theming.
+grid system for the editorial column layout. Light theme only, by design.
 
 ## Requirements
 
@@ -30,21 +29,21 @@ npm install
 src/
 ├── content/     site.ts (approved copy + Project type + projectRoute())
 │                 assets.ts (placeholder media URLs + getProjectThumbnail())
-├── components/  Header · Footer · ThemeToggle · Reveal (scroll-in)
-│                 UntangleLine (hero signature move) · Marquee · Monogram
+├── components/  Header · Footer · Reveal (scroll-in) · UntangleLine
+│                 RotatingBadge (hero CTA) · Marquee · Monogram
 │                 ProjectRail (numbered rail, shared by SelectedWork + Work)
 │                 RouteTransition · SkipLink
 ├── sections/    one component per landing-page section
 ├── pages/       Landing · Work · ProjectDetail · Contact · NotFound
 │                 (each lazy-loaded — see App.tsx route-level code splitting)
 ├── layouts/     MainLayout (Header/Footer shell, skip link, scroll-to-top)
-├── hooks/       useReducedMotion · useReveal · useTheme · useDocumentHead
+├── hooks/       useReducedMotion · useReveal · useScrollParallax · useDocumentHead
 ├── styles/      global.scss — the single entry point (see below)
 └── App.tsx      routes
 ```
 
-No conventional nav bar, per the brief — the header carries only the name, a
-theme toggle, and a single "Say hello" link.
+No conventional nav bar, per the brief — the header carries only the name and
+a single "Say hello" link.
 
 ## Styles
 
@@ -79,22 +78,6 @@ expertise grid) use our own breakpoint mixins instead. Bootstrap's SCSS
 internals still lean on the legacy `@import` global-namespace model, so that
 one vendor file is a deliberate, contained exception to the
 `@use`/`@forward`-only rule the rest of the app follows.
-
-## Theming
-
-Light and dark both exist behind the same tokens (`--paper`, `--ink`,
-`--ink-soft`, `--line`) defined in `base/_tokens.scss`; only their *values*
-flip per theme. `--signal` (orange) and `--yellow` are fixed brand constants
-in both themes. Two elements are deliberately **not** theme-reactive at all —
-the yellow philosophy chapter-break and the AI × Design ink block — they're
-treated as fixed editorial devices, not page chrome, so they read the same
-regardless of theme (the AI block does gain a subtle border in dark mode,
-since a fixed-dark block needs an edge once the page canvas is also dark).
-
-Defaults to the system's `prefers-color-scheme`; an explicit toggle
-(`ThemeToggle.tsx`, in the header) overrides it and persists to
-`localStorage` (`nk-theme`). A small inline script in `index.html` applies
-the stored choice before first paint, to avoid a flash of the wrong theme.
 
 ## Content
 
@@ -149,9 +132,25 @@ light/dark `theme-color`).
 
 ## Signature move
 
-The hero's thin line (`UntangleLine.tsx`) starts tangled and straightens as
-the visitor scrolls past the first screen — a small literal echo of "I design
-complex products to feel simple." The numbered project rail
-(`ProjectRail.tsx`) stays quiet at rest and reveals a full image on
-hover/focus (desktop) — always visible on touch/mobile, since no essential
-content is hover-gated. Both fully respect `prefers-reduced-motion`.
+The hero is a layered, scroll-linked composition rather than a flat two-column
+split: a huge low-contrast capability word (`.hero__bg-word`) bleeds off the
+section's bottom edge behind everything else; the portrait and the five
+floating capability pills (`hero.capabilities`, split into individual badges)
+sit above it; a circular rotating "Say hello" badge (`RotatingBadge.tsx`,
+SVG `textPath`, links to `/contact`) overlaps the portrait's corner. One
+scroll listener (`useScrollParallax`) writes a single `--scroll-p` CSS custom
+property per frame; the background word, portrait and pills each read it at
+their own rate via `transform: translateY(calc(var(--scroll-p) * <px>))` —
+real depth from differential movement, not a repeated fade-in. The hero's
+thin line (`UntangleLine.tsx`) starts tangled and straightens as the visitor
+scrolls past the first screen — a small literal echo of "I design complex
+products to feel simple." The numbered project rail (`ProjectRail.tsx`) stays
+quiet at rest and reveals a full image on hover/focus (desktop) — always
+visible on touch/mobile, since no essential content is hover-gated.
+
+On narrow screens (below Bootstrap's own 768px column-stacking breakpoint —
+matched deliberately, not an independent guess) the pills and badge recompose
+into a static row rather than staying scattered against a now much-wider
+stacked portrait. Everything here respects `prefers-reduced-motion`: the
+parallax listener never attaches, the badge doesn't spin, the pills don't
+float.

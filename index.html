@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#FAFAF7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#FAFAF7" />
     <meta
       name="description"
       content="Nitish Kumar — Senior UI/UX & Product Designer, 8.5+ years, designing complex digital products across Web3, FinTech, HealthTech and SaaS."
@@ -21,21 +20,6 @@
     />
     <link rel="icon" href="data:," />
     <title>Nitish Kumar — Senior UI/UX &amp; Product Designer</title>
-    <script>
-      // Applied synchronously, before first paint, to avoid a flash of the
-      // wrong theme. The ThemeToggle component (src/components/ThemeToggle.tsx)
-      // owns this same "nk-theme" localStorage key afterwards.
-      (function () {
-        try {
-          var stored = localStorage.getItem('nk-theme');
-          if (stored === 'light' || stored === 'dark') {
-            document.documentElement.setAttribute('data-theme', stored);
-          }
-        } catch (e) {
-          /* localStorage unavailable (private mode, etc.) — system preference still applies via CSS */
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
