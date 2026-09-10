@@ -1,6 +1,3 @@
-/// Zero-output layer: functions, variables, breakpoints and mixins only.
-/// Partials pull this in with `@use '../abstracts' as *;`.
-@forward 'functions';
-@forward 'variables';
 @forward 'breakpoints';
-@forward 'mixins';
+@forward 'spacing';
+@forward 'typography';

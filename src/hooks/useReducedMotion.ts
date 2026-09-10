@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react';
 
-const QUERY = '(prefers-reduced-motion: reduce)';
-
-/** Live-updating reduced-motion preference. Gates every scroll effect. */
 export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(QUERY).matches,
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
 
   useEffect(() => {
-    const media = window.matchMedia(QUERY);
-    const onChange = () => setReduced(media.matches);
-
-    onChange();
-    media.addEventListener('change', onChange);
-    return () => media.removeEventListener('change', onChange);
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const listener = (event: MediaQueryListEvent) => setReduced(event.matches);
+    query.addEventListener('change', listener);
+    return () => query.removeEventListener('change', listener);
   }, []);
 
   return reduced;

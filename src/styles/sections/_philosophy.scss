@@ -1,90 +1,23 @@
-@use '../abstracts' as *;
+// A deliberate full-bleed color break — dark ink text on yellow.
+.philosophy-break {
+  background: var(--yellow);
+  color: var(--ink);
+}
 
-/// Figma 108:783 — #FCF9F6 band, 120/160 padding, 80px column gap.
 .philosophy {
-  padding-block: fluid(64, 120);
-  background-color: var(--c-bg-elevated);
+  padding-block: var(--section-space);
+  text-align: center;
+}
 
-  &__inner {
-    display: grid;
-    gap: fluid(40, 80);
-    align-items: center;
+.philosophy__headline {
+  font-size: clamp(2.2rem, 5.6vw, 4.2rem);
+  max-width: 20ch;
+  margin: 0 auto;
+}
 
-    @include container;
-
-    @include up('lg') {
-      grid-template-columns: minmax(0, auto) minmax(0, 967fr);
-    }
-  }
-
-  /// -- Manifesto card: supplied as one finished image ------------------
-  &__art {
-    display: flex;
-    justify-content: center;
-  }
-
-  &__art-img {
-    width: 100%;
-    max-width: #{rem(568)};
-    height: auto;
-    object-fit: contain;
-  }
-
-  /// -- Copy column --------------------------------------------------------
-  &__copy {
-    display: flex;
-    flex-direction: column;
-    gap: fluid(24, 40.527);
-    align-items: flex-start;
-  }
-
-  &__eyebrow {
-    @include text-eyebrow;
-  }
-
-  &__title {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: fluid(27, 50);
-    line-height: 1.1;
-    color: var(--c-text-heading);
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: #{rem(16.211)};
-    font-size: fluid(15, 16);
-    line-height: 1.625;
-    color: var(--c-text-body);
-  }
-
-  &__checks {
-    display: flex;
-    flex-direction: column;
-    gap: #{rem(24.316)};
-  }
-
-  &__check {
-    display: flex;
-    gap: #{rem(8.105)};
-    align-items: center;
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: fluid(15, 16);
-    line-height: 1.52;
-    color: var(--c-text-body);
-  }
-
-  &__check-icon {
-    display: block;
-    flex-shrink: 0;
-    width: #{rem(29.18)};
-    height: #{rem(29.18)};
-  }
-
-  /// The eyebrow / title / body sit in one flow; the gap above handles rhythm.
-  &__title + &__body {
-    margin-block-start: #{rem(-16)};
-  }
+.philosophy__statement {
+  color: rgba(20, 20, 20, 0.7);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  max-width: 40ch;
+  margin: 24px auto 0;
 }

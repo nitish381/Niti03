@@ -1,0 +1,33 @@
+@use '../abstracts' as *;
+
+.work-list__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: clamp(32px, 5vw, 56px);
+  gap: space(6);
+}
+
+.work-list__heading {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  max-width: 16ch;
+}
+
+.work-list__more {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 3px;
+}
+
+@include tablet-down {
+  .work-list__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: space(3);
+  }
+}

@@ -1,134 +1,299 @@
 @use '../abstracts' as *;
 
-/// Hero — `raahi-hero.png` is a finished 1920 × 1080 composition. The job here
-/// is to frame it without cropping away the golden path or either waypoint,
-/// and to keep the headline clear of them.
 .hero {
   position: relative;
-  isolation: isolate;
-  overflow: clip;
-  background-color: var(--c-static-black);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: clamp(96px, 14vh, 160px);
+  padding-bottom: clamp(48px, 8vh, 96px);
+  // Clip only the axis the bled background word could overflow horizontally
+  // on; let it bleed past the section's own bottom edge vertically, where
+  // the next section's opaque background naturally cuts it off — the same
+  // "cropped at the fold" look the reference uses.
+  overflow-x: clip;
+  overflow-y: visible; // explicit: pairing overflow-x with a non-"visible" value can otherwise flip this to "auto"
+  --scroll-p: 0; // driven by useScrollParallax; 0 when JS hasn't run yet (first paint, reduced motion)
+}
 
-  @include inverse-surface;
+// --- background layer: a huge, low-contrast bled word behind everything ---
+// The dimensional-layering device: subject, foreground pills and CTA badge
+// all sit above this at rest, and it drifts at its own rate on scroll.
+.hero__bg-word {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(-40px, -4vw, -10px);
+  z-index: 0;
+  margin: 0;
+  font-size: clamp(6rem, 17vw, 13rem);
+  line-height: 0.85;
+  color: var(--surface);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateY(calc(var(--scroll-p) * 60px));
+}
 
-  /// Desktop: the artwork fills one viewport, as in Figma.
-  @include up('md') {
+.hero__row {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.6vw, 28px);
+}
+
+.hero__headline {
+  font-size: clamp(2.6rem, 7vw, 5.6rem);
+  max-width: 13ch;
+  animation: hero-reveal 1s var(--ease) both;
+  animation-delay: 0.1s;
+}
+
+@keyframes hero-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(14px);
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+    transform: translateY(0);
+  }
+}
+
+@include reduced-motion {
+  .hero__headline {
+    animation: none;
+  }
+}
+
+.hero__line {
+  width: min(320px, 60%);
+  height: 56px;
+}
+
+.hero__role {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-weight: 600;
+}
+
+.hero__description {
+  max-width: 46ch;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+}
+
+// --- subject + foreground layers ---
+
+.hero__portrait-wrap {
+  position: relative;
+}
+
+.hero__portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface);
+  transform: translateY(calc(var(--scroll-p) * -18px));
+}
+
+.hero__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.55) contrast(1.08);
+}
+
+.hero__pills {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__pill {
+  --float-delay: calc(var(--i) * 0.4s);
+  position: absolute;
+  pointer-events: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 12px 24px rgba(20, 20, 20, 0.08);
+  animation: pill-float 5s ease-in-out infinite;
+  animation-delay: var(--float-delay);
+  transform: translateY(calc(var(--scroll-p) * -34px));
+
+  // scattered around the portrait's edges, five approved capability words
+  &:nth-child(1) {
+    top: 8%;
+    right: -8%;
+  }
+  &:nth-child(2) {
+    top: 32%;
+    right: -14%;
+  }
+  &:nth-child(3) {
+    top: 32%;
+    left: -12%;
+  }
+  &:nth-child(4) {
+    bottom: 16%;
+    right: -6%;
+  }
+  // top-left is the one corner the badge (bottom-left) and the other four
+  // pills (right side + left-mid) leave clear
+  &:nth-child(5) {
+    top: -4%;
+    left: -4%;
+  }
+}
+
+@keyframes pill-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@include reduced-motion {
+  .hero__pill {
+    animation: none;
+  }
+}
+
+// --- CTA layer: rotating circular badge, overlapping the portrait ---
+
+.hero-badge {
+  position: absolute;
+  left: -10%;
+  bottom: -6%;
+  z-index: 2;
+  width: clamp(84px, 9vw, 116px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--signal);
+  color: var(--paper);
+}
+
+.hero-badge__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-badge__ring--spin {
+  animation: badge-spin 11s linear infinite;
+}
+
+@keyframes badge-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-badge__text {
+  font-family: var(--font-text);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  fill: currentColor;
+  text-transform: uppercase;
+}
+
+.hero-badge__arrow {
+  position: relative;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+}
+
+// --- responsive recomposition ---
+
+// Bootstrap stacks Hero's columns to a single one below 768px (its own `md`
+// breakpoint — see the Row/Col usage in Hero.tsx). The scattered absolute
+// pill/badge positions only make sense relative to a portrait sitting
+// *beside* the copy; once the layout stacks, they need to recompose too, at
+// this exact same breakpoint — a mismatched one previously left a broken
+// middle zone (pills scattered against a now much-wider stacked portrait,
+// drifting off the edges of the viewport).
+@media (max-width: 767.98px) {
+  .hero__portrait-col {
+    order: -1;
+  }
+
+  .hero__portrait {
+    max-width: 55%;
+  }
+
+  // A dense cluster of absolutely-positioned pills has no room to scatter
+  // once the portrait is no longer beside a wide copy column — recompose as
+  // a static wrapped row below it instead of shrinking the desktop layout
+  // in place.
+  .hero__pills {
+    position: static;
     display: flex;
-    align-items: center;
-    min-height: #{rem(640)};
-    height: 100svh;
-    max-height: #{rem(1080)};
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
   }
 
-  &__stage {
-    position: absolute;
-    inset: 0;
-    z-index: $z-decor;
-    overflow: clip;
-    pointer-events: none;
-
-    /// Below 768 the composition is shown whole, above the copy, at its own
-    /// aspect ratio — the waypoint labels are painted into the artwork, so
-    /// cropping here would cut the story out of the picture.
-    @include down('md') {
-      position: relative;
-      aspect-ratio: 1920 / 1080;
-    }
+  .hero__pill {
+    position: static;
+    animation: none;
+    transform: none;
+    font-size: 0.75rem;
+    padding: 8px 15px;
   }
 
-  /// Oversized so parallax never exposes an edge.
-  &__art {
-    position: absolute;
-    inset-block-start: -6%;
-    inset-inline: 0;
-    height: 112%;
-
-    @include down('md') {
-      position: static;
-      height: auto;
-    }
-  }
-
-  &__art-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-
-    /// Anchored right. When the viewport is narrower than 16:9 the artwork is
-    /// cropped from the left, where it is empty valley and where the headline
-    /// sits anyway — that keeps the golden path and both waypoint labels, which
-    /// are painted into the image, fully on screen.
-    object-position: 100% center;
-
-    @include down('md') {
-      height: auto;
-      object-fit: fill;
-    }
-  }
-
-  /// Deepens the left edge so the headline always has ground to sit on.
-  /// Matches the black-to-transparent scrim in the Figma frame.
-  &__scrim {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      90deg,
-      var(--c-static-black) 0%,
-      rgb(0 0 0 / 55%) 28%,
-      rgb(0 0 0 / 0%) 58%
-    );
-
-    @include down('md') {
-      background-image: linear-gradient(
-        180deg,
-        rgb(0 0 0 / 55%) 0%,
-        rgb(0 0 0 / 0%) 40%
-      );
-    }
-  }
-
-  &__inner {
+  // `relative`, not `static` — the ring inside is `position: absolute;
+  // inset: 0`, which needs *some* positioned ancestor to size against, or it
+  // escapes to the next one up (.hero__portrait-wrap) and stretches across
+  // the whole portrait instead of staying inside the badge circle.
+  .hero-badge {
     position: relative;
-    z-index: $z-content;
-    width: 100%;
+    left: auto;
+    bottom: auto;
+    margin-top: 16px;
+  }
+}
 
-    @include container;
-
-    @include down('md') {
-      padding-block: var(--space-2xl) var(--space-3xl);
-    }
+@include mobile-down {
+  .hero {
+    padding-top: 128px;
   }
 
-  &__copy {
-    display: flex;
-    flex-direction: column;
-    gap: fluid(28, 60);
-    align-items: flex-start;
-    max-width: #{rem(810)};
-
-    /// Keep the headline clear of the golden path on mid widths.
-    @include between('md', 'xl') {
-      max-width: #{rem(540)};
-    }
+  .hero__portrait {
+    max-width: 78%;
   }
 
-  &__title {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: fluid(40, 120);
-    line-height: 1.05;
-    color: var(--c-static-white);
-    text-shadow: 0 2px 40px rgb(0 0 0 / 45%);
+  .hero__bg-word {
+    font-size: clamp(3.6rem, 20vw, 6rem);
   }
 
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: #{rem(20)};
-    max-width: #{rem(576.374)};
-    font-size: fluid(16, 18);
-    line-height: 1.5;
-    color: var(--c-static-stone);
-    text-shadow: 0 1px 20px rgb(0 0 0 / 55%);
+  .hero__pill {
+    font-size: 0.68rem;
+    padding: 7px 13px;
+  }
+
+  .hero-badge {
+    width: 72px;
+  }
+}
+
+@include reduced-motion {
+  .hero__bg-word,
+  .hero__portrait,
+  .hero__pill {
+    transform: none;
   }
 }

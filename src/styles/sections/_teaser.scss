@@ -1,0 +1,57 @@
+@use '../abstracts' as *;
+
+.teaser {
+  position: relative;
+  padding: 0;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  background: var(--ink);
+  --scroll-p: 0;
+}
+
+.teaser video,
+.teaser__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// Oversized (110% height, centered) so the slow vertical drift never
+// exposes an edge — a subtle echo of the reference's parallaxed background
+// video, kept restrained: ~4% of the section's own height, not a scrub.
+.teaser__video {
+  height: 110%;
+  top: -5%;
+  transform: translateY(calc(var(--scroll-p) * 4%));
+}
+
+.teaser__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.1) 0%, rgba(20, 20, 20, 0.6) 100%);
+}
+
+.teaser__caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(24px, 4vw, 48px);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.6vw, 2.6rem);
+  max-width: 18ch;
+  text-transform: uppercase;
+}
+
+@include reduced-motion {
+  .teaser__video {
+    transform: none;
+  }
+}
+
+@include mobile-down {
+  .teaser {
+    aspect-ratio: 4 / 5;
+  }
+}

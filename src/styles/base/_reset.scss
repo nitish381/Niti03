@@ -1,72 +1,35 @@
-@use '../abstracts' as *;
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-* {
-  margin: 0;
-}
-
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-padding-top: var(--header-height);
+  scroll-behavior: smooth;
+}
 
-  /// Lenis drives scrolling and would fight native smooth behaviour. The class
-  /// is set only when Lenis is switched off (reduced motion, or touch), where
-  /// native smooth scrolling is what we want for anchors.
-  &.no-lenis {
-    scroll-behavior: smooth;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
-body {
-  min-height: 100svh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizelegibility;
-}
-
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-input,
-button,
-textarea,
-select {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-p,
+body,
 h1,
 h2,
 h3,
 h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
+p,
+figure,
+ol {
+  margin: 0;
 }
 
-ul[class],
-ol[class] {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+img,
+video {
+  display: block;
+  max-width: 100%;
 }
 
 a {
@@ -74,21 +37,17 @@ a {
   text-decoration: none;
 }
 
-:focus-visible {
-  @include focus-ring;
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
 
-@include reduced-motion {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

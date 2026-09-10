@@ -1,0 +1,19 @@
+// Static spacing scale (non-fluid). Fluid, viewport-scaled rhythm inside a
+// single section continues to use clamp() literals inline — that's a design
+// choice (premium editorial fluid type/spacing), not something a static
+// scale should flatten.
+$spacers: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 24px,
+  6: 32px,
+  7: 48px,
+  8: 64px,
+  9: 96px,
+);
+
+@function space($key) {
+  @return map-get($spacers, $key);
+}

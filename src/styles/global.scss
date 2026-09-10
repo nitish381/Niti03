@@ -1,55 +1,35 @@
-// ---------------------------------------------------------------------------
-// RAAHI — single global stylesheet
-//
-// This is the only stylesheet the application imports. Every partial is pulled
-// in here, in cascade order; components never import SCSS of their own.
-//
-// Layers, in order:
-//   vendor      Bootstrap bundle + CSS-variable re-theme
-//   base        design tokens, reset, element defaults, utilities
-//   layout      container, section shell, header, footer
-//   components  reusable UI primitives
-//   sections    one partial per landing-page section
-//
-// `abstracts` is a zero-output layer (functions, variables, breakpoints,
-// mixins). Partials reach it with `@use '../abstracts' as *;` — required by the
-// Sass module system and scoped to SCSS only.
-// ---------------------------------------------------------------------------
-
-// -- vendor -----------------------------------------------------------------
+// Single global SCSS entry point. Nothing else in the app imports SCSS —
+// components only ever add classNames that these partials define.
 @use 'vendor/bootstrap';
 
-// -- base -------------------------------------------------------------------
-@use 'base/fonts';
-@use 'base/tokens';
 @use 'base/reset';
+@use 'base/tokens';
 @use 'base/base';
-@use 'base/typography';
-@use 'base/utilities';
 
-// -- layout -----------------------------------------------------------------
-@use 'layout/header';
-@use 'layout/footer';
+@use 'components/reveal';
+@use 'components/stagger-text';
+@use 'components/cursor';
+@use 'components/back-to-top';
+@use 'components/route-transition';
+@use 'components/header';
+@use 'components/footer';
+@use 'components/monogram';
+@use 'components/marquee';
+@use 'components/rail';
 
-// -- components -------------------------------------------------------------
-@use 'components/asset-slot';
-@use 'components/button';
-@use 'components/logo';
-@use 'components/app-badge';
-@use 'components/node-marker';
-
-// -- sections ---------------------------------------------------------------
 @use 'sections/hero';
-@use 'sections/statement-band';
-@use 'sections/signal-diagram';
-@use 'sections/dark-banner';
-@use 'sections/book-carousel';
-@use 'sections/river-journey';
+@use 'sections/intro';
+@use 'sections/teaser';
+@use 'sections/expertise';
+@use 'sections/work-list';
+@use 'sections/experience';
+@use 'sections/ai-design';
+@use 'sections/process';
 @use 'sections/philosophy';
-@use 'sections/feature-grid';
-@use 'sections/iceberg';
-@use 'sections/seminar';
-@use 'sections/founder-message';
-@use 'sections/faq';
-@use 'sections/app-download';
-@use 'sections/newsletter';
+@use 'sections/industries';
+@use 'sections/about';
+@use 'sections/final-cta';
+
+@use 'pages/work-page';
+@use 'pages/project-detail';
+@use 'pages/contact-page';
